@@ -42,8 +42,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="mU.MLib">
-      <HintPath>..\..\mU.MLib\mU.MLib\bin\Release\CryptoObfuscator_Output\mU.MLib.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>.\mU.MLib.dll</HintPath>
     </Reference>
     <Reference Include="ReaperTheme">
       <HintPath>.\ReaperTheme.dll</HintPath>
