@@ -46,8 +46,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="ReaperTheme">
-      <HintPath>..\..\AMPED_ServerEmu_Template\ReaperTheme.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>.\ReaperTheme.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
