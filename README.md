@@ -21,4 +21,4 @@ basically the difference between DNiD and PEiD ;)
 * Other community or team contact
 
 ### Build ###
-https://ci.appveyor.com/api/projects/status/s4rff1rmfh9295pv?svg=true
+[![Build status](https://ci.appveyor.com/api/projects/status/s4rff1rmfh9295pv?svg=true)](https://ci.appveyor.com/project/styx2007/mu-dnid)
