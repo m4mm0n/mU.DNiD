@@ -1,0 +1,11 @@
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\bin\Release\README.txt
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\bin\Release\DNiD2.exe.config
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\bin\Release\DNiD2.exe
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiDGUI.csprojResolveAssemblyReference.cache
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiDGUI.frmMain.resources
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiD2.intForms.frmAbout.resources
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiD2.intForms.frmHexView.resources
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiD2.intForms.frmSecView.resources
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiD2.Properties.Resources.resources
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiDGUI.csproj.GenerateResource.Cache
+K:\_VSProjects_\Visual Studio 2015\mU.DNiD\mU.DNiD\obj\Release\DNiD2.exe
