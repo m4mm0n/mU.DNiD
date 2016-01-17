@@ -39,9 +39,9 @@
     <ApplicationIcon>umbrella_firefox_dock_icon_by_jill___valentine-d38w5k9.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dnlib">
-      <HintPath>..\..\mU.StrongTool\mU.StrongTool\bin\dnlib.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="dnlib, Version=1.5.0.1500, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\dnlib.dll</HintPath>
     </Reference>
     <Reference Include="ReaperTheme">
       <HintPath>.\ReaperTheme.dll</HintPath>
