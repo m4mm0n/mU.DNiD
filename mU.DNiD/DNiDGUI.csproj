@@ -42,9 +42,11 @@
     <Reference Include="dnlib, Version=1.5.0.1500, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\dnlib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ReaperTheme">
       <HintPath>.\ReaperTheme.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
