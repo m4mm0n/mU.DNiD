@@ -17,7 +17,25 @@ one simple reason; simplicity of the mind, thus only the theme is
 basically the difference between DNiD and PEiD ;)
 
 
+TODO:
++Add complete x64 & x86 plugin support... (not PEiD ones, or native ones...)
++Add possibility of using different pattern-finder engines... (thx mr.eXodia for the idea)
++Add a simple disassembly-view window...
++Add a simple hex-view window...
++Add a simple error-handler window/control...
++++Got suggestions? Good, send them to me!+++
+
+
+
 VERSION
+
+[2016/01/17] - 2.0.2.0: (by mammon)
+=======================
++Added complete PEiD plugin(s) support... (this is a bit buggy!)
+*Fixed "Open File" issue... (thx Apuromafo)
+*Changed the binary-search algorithm to now be
+ part of main-assembly... (less size!)
+*Changed alot of the "foreach" loops with "Parallel"'s, instead...
 
 [2016/01/14] - 2.0.1.0: (by mammon)
 =======================

@@ -3,7 +3,6 @@
   <Costura>
     <IncludeAssemblies>
       dnlib
-      mU.MLib
       ReaperTheme
     </IncludeAssemblies>
   </Costura>  

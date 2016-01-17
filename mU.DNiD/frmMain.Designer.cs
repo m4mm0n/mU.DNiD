@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.txtFilePath = new ReaperTheme.Controls.ReaperTextbox();
             this.reaperLabel1 = new ReaperTheme.Controls.ReaperLabel();
@@ -44,13 +45,15 @@
             this.reaperLabel5 = new ReaperTheme.Controls.ReaperLabel();
             this.reaperLabel6 = new ReaperTheme.Controls.ReaperLabel();
             this.reaperLabel7 = new ReaperTheme.Controls.ReaperLabel();
-            this.reaperButton2 = new ReaperTheme.Controls.ReaperButton();
-            this.reaperButton3 = new ReaperTheme.Controls.ReaperButton();
-            this.reaperButton4 = new ReaperTheme.Controls.ReaperButton();
             this.reaperTextbox8 = new ReaperTheme.Controls.ReaperTextbox();
             this.reaperButton5 = new ReaperTheme.Controls.ReaperButton();
             this.reaperButton6 = new ReaperTheme.Controls.ReaperButton();
             this.reaperButton7 = new ReaperTheme.Controls.ReaperButton();
+            this.mnuPlugins = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtFilePath
@@ -100,6 +103,7 @@
             this.reaperButton1.Text = "...";
             this.reaperButton1.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
             this.reaperButton1.UseVisualStyleBackColor = false;
+            this.reaperButton1.Click += new System.EventHandler(this.reaperButton1_Click);
             // 
             // txtEntrypoint
             // 
@@ -275,60 +279,6 @@
             this.reaperLabel7.Text = "Subsystem:";
             this.reaperLabel7.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
             // 
-            // reaperButton2
-            // 
-            this.reaperButton2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.reaperButton2.ButtonState = ReaperTheme.ReaperEnums.ReaperButtonState.Normal;
-            this.reaperButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.reaperButton2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(175)))), ((int)(((byte)(175)))));
-            this.reaperButton2.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.reaperButton2.Location = new System.Drawing.Point(610, 62);
-            this.reaperButton2.Name = "reaperButton2";
-            this.reaperButton2.OverrideBackColor = true;
-            this.reaperButton2.OverrideHoverColor = false;
-            this.reaperButton2.Size = new System.Drawing.Size(30, 24);
-            this.reaperButton2.TabIndex = 15;
-            this.reaperButton2.Text = ">";
-            this.reaperButton2.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
-            this.reaperButton2.UseVisualStyleBackColor = false;
-            this.reaperButton2.Click += new System.EventHandler(this.reaperButton2_Click);
-            // 
-            // reaperButton3
-            // 
-            this.reaperButton3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.reaperButton3.ButtonState = ReaperTheme.ReaperEnums.ReaperButtonState.Normal;
-            this.reaperButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.reaperButton3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(175)))), ((int)(((byte)(175)))));
-            this.reaperButton3.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.reaperButton3.Location = new System.Drawing.Point(610, 92);
-            this.reaperButton3.Name = "reaperButton3";
-            this.reaperButton3.OverrideBackColor = true;
-            this.reaperButton3.OverrideHoverColor = false;
-            this.reaperButton3.Size = new System.Drawing.Size(30, 24);
-            this.reaperButton3.TabIndex = 16;
-            this.reaperButton3.Text = ">";
-            this.reaperButton3.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
-            this.reaperButton3.UseVisualStyleBackColor = false;
-            this.reaperButton3.Click += new System.EventHandler(this.reaperButton3_Click);
-            // 
-            // reaperButton4
-            // 
-            this.reaperButton4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.reaperButton4.ButtonState = ReaperTheme.ReaperEnums.ReaperButtonState.Normal;
-            this.reaperButton4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.reaperButton4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(175)))), ((int)(((byte)(175)))));
-            this.reaperButton4.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.reaperButton4.Location = new System.Drawing.Point(610, 122);
-            this.reaperButton4.Name = "reaperButton4";
-            this.reaperButton4.OverrideBackColor = true;
-            this.reaperButton4.OverrideHoverColor = false;
-            this.reaperButton4.Size = new System.Drawing.Size(30, 24);
-            this.reaperButton4.TabIndex = 17;
-            this.reaperButton4.Text = ">";
-            this.reaperButton4.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
-            this.reaperButton4.UseVisualStyleBackColor = false;
-            this.reaperButton4.Click += new System.EventHandler(this.reaperButton4_Click);
-            // 
             // reaperTextbox8
             // 
             this.reaperTextbox8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -353,7 +303,7 @@
             this.reaperButton5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.reaperButton5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(175)))), ((int)(((byte)(175)))));
             this.reaperButton5.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.reaperButton5.Location = new System.Drawing.Point(571, 211);
+            this.reaperButton5.Location = new System.Drawing.Point(193, 211);
             this.reaperButton5.Name = "reaperButton5";
             this.reaperButton5.OverrideBackColor = true;
             this.reaperButton5.OverrideHoverColor = false;
@@ -371,7 +321,7 @@
             this.reaperButton6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.reaperButton6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(175)))), ((int)(((byte)(175)))));
             this.reaperButton6.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.reaperButton6.Location = new System.Drawing.Point(277, 211);
+            this.reaperButton6.Location = new System.Drawing.Point(102, 211);
             this.reaperButton6.Name = "reaperButton6";
             this.reaperButton6.OverrideBackColor = true;
             this.reaperButton6.OverrideHoverColor = false;
@@ -400,19 +350,71 @@
             this.reaperButton7.UseVisualStyleBackColor = false;
             this.reaperButton7.Click += new System.EventHandler(this.reaperButton7_Click);
             // 
+            // mnuPlugins
+            // 
+            this.mnuPlugins.Name = "mnuPlugins";
+            this.mnuPlugins.Size = new System.Drawing.Size(153, 26);
+            this.mnuPlugins.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mnuPlugins_ItemClicked);
+            this.mnuPlugins.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mnuPlugins_MouseClick);
+            // 
+            // button1
+            // 
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(610, 211);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(30, 24);
+            this.button1.TabIndex = 23;
+            this.button1.Text = ">";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.ForeColor = System.Drawing.Color.Black;
+            this.button2.Location = new System.Drawing.Point(610, 62);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(30, 24);
+            this.button2.TabIndex = 24;
+            this.button2.Text = ">";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.ForeColor = System.Drawing.Color.Black;
+            this.button3.Location = new System.Drawing.Point(610, 92);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(30, 24);
+            this.button3.TabIndex = 25;
+            this.button3.Text = ">";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.ForeColor = System.Drawing.Color.Black;
+            this.button4.Location = new System.Drawing.Point(610, 122);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(30, 24);
+            this.button4.TabIndex = 26;
+            this.button4.Text = ">";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(661, 243);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.reaperButton7);
             this.Controls.Add(this.reaperButton6);
             this.Controls.Add(this.reaperButton5);
             this.Controls.Add(this.reaperTextbox8);
-            this.Controls.Add(this.reaperButton4);
-            this.Controls.Add(this.reaperButton3);
-            this.Controls.Add(this.reaperButton2);
             this.Controls.Add(this.reaperLabel7);
             this.Controls.Add(this.reaperLabel6);
             this.Controls.Add(this.reaperLabel5);
@@ -459,13 +461,15 @@
         private ReaperTheme.Controls.ReaperLabel reaperLabel5;
         private ReaperTheme.Controls.ReaperLabel reaperLabel6;
         private ReaperTheme.Controls.ReaperLabel reaperLabel7;
-        private ReaperTheme.Controls.ReaperButton reaperButton2;
-        private ReaperTheme.Controls.ReaperButton reaperButton3;
-        private ReaperTheme.Controls.ReaperButton reaperButton4;
         private ReaperTheme.Controls.ReaperTextbox reaperTextbox8;
         private ReaperTheme.Controls.ReaperButton reaperButton5;
         private ReaperTheme.Controls.ReaperButton reaperButton6;
         private ReaperTheme.Controls.ReaperButton reaperButton7;
+        private System.Windows.Forms.ContextMenuStrip mnuPlugins;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 

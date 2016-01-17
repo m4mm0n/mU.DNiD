@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+    DNiD 2 - PE Identifier.
+    Copyright (C) 2016  mammon
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+using DNiD2.intClasses;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +36,7 @@ namespace DNiDGUI
         private string fileToScan;
         private BackgroundWorker bw;
 
+        #region Main Form Functions:
         public frmMain([Optional]string File2Scan)
         {
             bw = new BackgroundWorker();
@@ -33,21 +53,9 @@ namespace DNiDGUI
             {
                 fileToScan = File2Scan;
                 txtFilePath.Text = fileToScan;
-                //ScanFile();
                 bw.RunWorkerAsync();
             }
         }
-
-        private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            reaperButton7.Enabled = true;
-        }
-
-        private void Bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            ScanFile();
-        }
-
         private void FrmMain_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -55,22 +63,101 @@ namespace DNiDGUI
             else
                 e.Effect = DragDropEffects.None; // Unknown data, ignore it
         }
-
         private void FrmMain_DragDrop(object sender, DragEventArgs e)
         {
-            txtEntrypoint.Text = "";
-            txtEPSection.Text = "";
-            txtFileOffset.Text = "";
-            txtFilePath.Text = "";
-            txtFirstBytes.Text = "";
-            txtLinkerInfo.Text = "";
-            txtSubSystem.Text = "";
-            reaperTextbox8.Text = "";
+            if (!bw.IsBusy)
+            {
+                txtEntrypoint.Text = "";
+                txtEPSection.Text = "";
+                txtFileOffset.Text = "";
+                txtFilePath.Text = "";
+                txtFirstBytes.Text = "";
+                txtLinkerInfo.Text = "";
+                txtSubSystem.Text = "";
+                reaperTextbox8.Text = "";
 
-            txtFilePath.Text = GetFilename(e);
+                txtFilePath.Text = GetFilename(e);
+                reaperButton7.Enabled = false;
+                bw.RunWorkerAsync();
+            }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            clsPluginSupport.InitPeidPlugins();
+            if (clsPluginSupport.plugPEiD.Count > 0)
+                AddNativePlugins(clsPluginSupport.plugPEiD);
+        }
+        #endregion
+        #region Button Functions:
+        private void reaperButton7_Click(object sender, EventArgs e)
+        {
             reaperButton7.Enabled = false;
-            //ScanFile();
             bw.RunWorkerAsync();
+        }
+        private void reaperButton5_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+        private void reaperButton6_Click(object sender, EventArgs e)
+        {
+            using (var frm = new DNiD2.intForms.frmAbout())
+            {
+                frm.ShowDialog();
+            }
+        }
+        private void reaperButton1_Click(object sender, EventArgs e)
+        {
+            using (var a = new OpenFileDialog())
+            {
+                if (txtFilePath.Text.Length > 0)
+                    a.InitialDirectory = Path.GetDirectoryName(txtFilePath.Text);
+
+                if (a.ShowDialog() == DialogResult.OK)
+                {
+                    txtFilePath.Text = a.FileName;
+                    bw.RunWorkerAsync();
+                }
+            }
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (mnuPlugins.Items.Count > 0)
+                mnuPlugins.Show(button1, button1.PointToClient(Cursor.Position));
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (txtFilePath.Text.Length > 0)
+            {
+                using (var a = new dnlib.PE.PEImage(File.ReadAllBytes(txtFilePath.Text)))
+                {
+                    using (var frm = new DNiD2.intForms.frmSecView(a))
+                    {
+                        frm.ShowDialog();
+                    }
+                }
+            }
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        private void mnuPlugins_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            GetNativeFunction(e.ClickedItem.Text);
+        }
+        #endregion
+
+        private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            reaperButton7.Enabled = true;
+        }
+        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            ScanFile();
         }
         private static string GetFilename(DragEventArgs e)
         {
@@ -82,38 +169,53 @@ namespace DNiDGUI
                 var data = ((IDataObject)e.Data).GetData("FileNameW") as Array;
                 if (data != null)
                 {
-                    foreach(var a in data)
-                    {
-                        Console.WriteLine(a);
-                    }
                     if ((data.Length == 1) && (data.GetValue(0) is String))
                     {
                         filename = ((string[])data)[0];
                         var ext = Path.GetExtension(filename).ToLower();
-                        //if ((ext == ".exe") || (ext == ".png") || (ext == ".bmp"))
-                        //{
                         ret = filename;
-                        //}
                     }
                 }
             }
             return ret;
         }
-        private void Form1_Load(object sender, EventArgs e)
+        #region Native Plugin Support:
+        private void AddNativePlugins(Dictionary<string,string> myPlugins)
         {
-
+            Parallel.ForEach(myPlugins, (a) =>
+            {
+                mnuPlugins.Items.Add(a.Key);
+            });
         }
-
+        private void GetNativeFunction(string plugName)
+        {
+            var b = txtFilePath.Text;
+            Parallel.ForEach(clsPluginSupport.plugPEiD, (a) =>
+            {
+                if (a.Key == plugName)
+                {
+                    clsPluginSupport.doPeidPluginJob(a.Value, b, this.Handle);
+                    return;
+                }
+            });
+        }
+        #endregion
+        private static string GetSectionHeaderName(uint rva, dnlib.PE.PEImage myPe)
+        {
+            var myRet = "";
+            Parallel.ForEach(myPe.ImageSectionHeaders, (section) =>
+            {
+                if (rva >= (uint)section.VirtualAddress && rva < (uint)section.VirtualAddress + Math.Max(section.VirtualSize, section.SizeOfRawData))
+                {
+                    myRet = Encoding.ASCII.GetString(section.Name);
+                    return;
+                }
+            });
+            return myRet;
+        }
         private void frmMain_onColorBarColorChanged(object sender, ReaperTheme.ReaperEvents.OnColorBarColorChanged e)
         {
 
-        }
-
-        private void reaperButton7_Click(object sender, EventArgs e)
-        {
-            //ScanFile();
-            reaperButton7.Enabled = false;
-            bw.RunWorkerAsync();
         }
 
         private delegate void ScanFileDelegate();
@@ -129,11 +231,13 @@ namespace DNiDGUI
                     {
                         if (File.Exists(Environment.CurrentDirectory + @"\external_sigs.txt"))
                         {
-                            reaperTextbox8.Text = mU.MLib.Utils.dnID.Scan(txtFilePath.Text, Environment.CurrentDirectory + @"\external_sigs.txt").Trim();
+                            clsScanner.SetSignatureDB(false, false, true, Environment.CurrentDirectory + @"\external_sigs.txt");
+                            reaperTextbox8.Text = clsScanner.Scan(txtFilePath.Text).Trim();
                         }
                         else
                         {
-                            reaperTextbox8.Text = mU.MLib.Utils.dnID.Scan(txtFilePath.Text).Trim();
+                            clsScanner.SetSignatureDB(true, false, false);
+                            reaperTextbox8.Text = clsScanner.Scan(txtFilePath.Text).Trim();
                         }
                         txtEntrypoint.Text = "0x" + ((uint)a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint).ToString("X8");
 
@@ -152,52 +256,11 @@ namespace DNiDGUI
                 }
             }
         }
-
-        private static string GetSectionHeaderName(uint rva, dnlib.PE.PEImage myPe)
+        private void mnuPlugins_MouseClick(object sender, MouseEventArgs e)
         {
-            foreach (var section in myPe.ImageSectionHeaders)
-            {
-                if (rva >= (uint)section.VirtualAddress && rva < (uint)section.VirtualAddress + Math.Max(section.VirtualSize, section.SizeOfRawData))
-                    return Encoding.ASCII.GetString(section.Name);
-            }
-            return "";
+            
         }
 
-        private void reaperButton2_Click(object sender, EventArgs e)
-        {
-            if (txtFilePath.Text.Length > 0)
-            {
-                using (var a = new dnlib.PE.PEImage(File.ReadAllBytes(txtFilePath.Text)))
-                {
-                    using (var frm = new DNiD2.intForms.frmSecView(a))
-                    {
-                        frm.ShowDialog();
-                    }
-                }
-            }
-        }
 
-        private void reaperButton3_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-
-        private void reaperButton4_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-
-        private void reaperButton5_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void reaperButton6_Click(object sender, EventArgs e)
-        {
-            using (var frm = new DNiD2.intForms.frmAbout())
-            {
-                frm.ShowDialog();
-            }
-        }
     }
 }
