@@ -24,6 +24,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,18 @@ namespace DNiDGUI
             bw = new BackgroundWorker();
             bw.DoWork += Bw_DoWork;
             bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
+
+            if(!File.Exists(Path.GetTempPath() + "BeaEngine.dll"))
+            {
+                var curAsm = Assembly.GetExecutingAssembly();
+                byte[] ba = null;
+                using (Stream stm = curAsm.GetManifestResourceStream("DNiD2.Embedded.BeaEngine.dll"))
+                {
+                    ba = new byte[(int)stm.Length];
+                    stm.Read(ba, 0, (int)stm.Length);
+                }
+                File.WriteAllBytes(Path.GetTempPath() + "\\BeaEngine.dll", ba);
+            }
 
             InitializeComponent();
 
@@ -139,7 +152,13 @@ namespace DNiDGUI
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            var a = File.ReadAllBytes(txtFilePath.Text);
+            var b = new byte[1024];
+            Array.Copy(a, uint.Parse(txtFileOffset.Text, System.Globalization.NumberStyles.HexNumber), b, 0, 1024);
+            using (var frm = new DNiD2.intForms.frmChooser(uint.Parse(txtEntrypoint.Text, System.Globalization.NumberStyles.HexNumber), b))
+            {
+                frm.ShowDialog();
+            }
         }
         private void button4_Click(object sender, EventArgs e)
         {
@@ -182,22 +201,22 @@ namespace DNiDGUI
         #region Native Plugin Support:
         private void AddNativePlugins(Dictionary<string,string> myPlugins)
         {
-            Parallel.ForEach(myPlugins, (a) =>
+            foreach(var a in myPlugins)
             {
                 mnuPlugins.Items.Add(a.Key);
-            });
+            }
         }
         private void GetNativeFunction(string plugName)
         {
             var b = txtFilePath.Text;
-            Parallel.ForEach(clsPluginSupport.plugPEiD, (a) =>
+            foreach(var a in clsPluginSupport.plugPEiD)
             {
                 if (a.Key == plugName)
                 {
                     clsPluginSupport.doPeidPluginJob(a.Value, b, this.Handle);
-                    return;
+                    break;
                 }
-            });
+            }
         }
         #endregion
         private static string GetSectionHeaderName(uint rva, dnlib.PE.PEImage myPe)
@@ -239,18 +258,18 @@ namespace DNiDGUI
                             clsScanner.SetSignatureDB(true, false, false);
                             reaperTextbox8.Text = clsScanner.Scan(txtFilePath.Text).Trim();
                         }
-                        txtEntrypoint.Text = "0x" + ((uint)a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint).ToString("X8");
+                        txtEntrypoint.Text =  ((uint)a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint).ToString("X8");
 
                         txtSubSystem.Text = a.ImageNTHeaders.OptionalHeader.Subsystem.ToString();
                         txtEPSection.Text = GetSectionHeaderName((uint)a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint, a);
-                        txtFileOffset.Text = "0x" + ((uint)a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint)).ToString("X8");
+                        txtFileOffset.Text = ((uint)a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint)).ToString("X8");
                         var b = File.ReadAllBytes(txtFilePath.Text);
                         var c = (int)a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint);
                         txtFirstBytes.Text = b[c].ToString("X2") + "," + b[c + 1].ToString("X2") + "," + b[c + 2].ToString("X2") + "," + b[c + 3].ToString("X2");
                         txtLinkerInfo.Text = a.ImageNTHeaders.OptionalHeader.MajorLinkerVersion.ToString() + "." + a.ImageNTHeaders.OptionalHeader.MinorLinkerVersion.ToString();
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     reaperTextbox8.Text = "File not supported!";
                 }

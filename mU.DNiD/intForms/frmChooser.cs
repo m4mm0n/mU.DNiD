@@ -28,22 +28,45 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
-    public partial class frmHexView : Form
+    public partial class frmChooser : Form
     {
         private uint addr = 0;
         private byte[] bitsRead;
 
-        public frmHexView(uint addressToDisassemble, byte[] bytesToRead)
+        public frmChooser(uint addressToDisassemble, byte[] bytesToRead)
         {
             addr = addressToDisassemble;
             bitsRead = bytesToRead;
 
             InitializeComponent();
+
         }
 
-        private void frmHexView_Load(object sender, EventArgs e)
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                using (var frm = new frmDisassemblyView(addr, bitsRead))
+                {
+                    this.Hide();
+                    frm.ShowDialog();
+                    this.Close();
+                }
+            }
+            if (radioButton2.Checked)
+            {
+                //NOT ADDED YET!
+            }
         }
     }
 }

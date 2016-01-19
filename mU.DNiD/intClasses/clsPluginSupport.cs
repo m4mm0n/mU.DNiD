@@ -35,7 +35,6 @@ namespace DNiD2.intClasses
         [DllImport("kernel32.dll")]
         internal static extern bool FreeLibrary(IntPtr hModule);
 
-        //TODO: Add support for PEiD plugins
         //TODO: Add support for both x86 & x64 plugins - both Native & .NET
 
         /// <summary>
@@ -72,20 +71,17 @@ namespace DNiD2.intClasses
         {
             try
             {
-                var a = load_function<DoMyJob>("DoMyJob", dllName);                
-                var b = a(0, Marshal.StringToHGlobalAnsi(szFileName), 0, 0);
+                var a = clsNativeDllLoader.load_function<clsNativeDllLoader.DoMyJob>("DoMyJob", dllName);                
+                var b = a(hWnd, Marshal.StringToHGlobalAnsi(szFileName), 0, 0);
             }
             catch (Exception ex)
             {
-
+                using (var frm = new intForms.frmError("TargetSite: " + ex.TargetSite.Name + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
+                {
+                    frm.ShowDialog();
+                }
             }
         }
-        #region Delegates:
-        [UnmanagedFunctionPointer(CallingConvention.Winapi)]
-        private delegate IntPtr LoadDll();
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, BestFitMapping =false, CharSet = CharSet.Unicode, SetLastError = false, ThrowOnUnmappableChar = false)]
-        private delegate int DoMyJob(int hMainDlg, IntPtr szFname, int empty1, int empty2);
-        #endregion
         #region Private Methods:
         private static void AddPeidPlugin(string DllName, string From)
         {
@@ -98,19 +94,19 @@ namespace DNiD2.intClasses
         {
             try
             {
-                    var a = load_function<LoadDll>("LoadDll", peidDll);
-                    var b = Marshal.PtrToStringAnsi(a());
-                    return b;
-            }catch(Exception ex)
+                var dllHandler = IntPtr.Zero;
+                var a = clsNativeDllLoader.load_function<clsNativeDllLoader.LoadDll>("LoadDll", peidDll);
+                var b = Marshal.PtrToStringAnsi(a());
+                return b;
+            }
+            catch (Exception ex)
             {
+                using (var frm = new intForms.frmError("TargetSite: " + ex.TargetSite.Name + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
+                {
+                    frm.ShowDialog();
+                }
                 return null;
             }
-        }
-        private static T load_function<T>(string name, string m_dll) where T : class
-        {
-            var address = GetProcAddress(LoadLibrary(m_dll), name);
-            var fn_ptr = Marshal.GetDelegateForFunctionPointer(address, typeof(T));
-            return fn_ptr as T;
         }
         #endregion
         #endregion

@@ -38,6 +38,27 @@
   <PropertyGroup>
     <ApplicationIcon>umbrella_firefox_dock_icon_by_jill___valentine-d38w5k9.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="dnlib, Version=1.5.0.1500, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -67,8 +88,10 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="intClasses\BeaEngine\clsBeaEngine.cs" />
     <Compile Include="intClasses\clsExt.cs" />
     <Compile Include="intClasses\clsIntSignatures.cs" />
+    <Compile Include="intClasses\clsNativeDllLoader.cs" />
     <Compile Include="intClasses\clsPluginSupport.cs" />
     <Compile Include="intClasses\clsScanner.cs" />
     <Compile Include="intForms\frmAbout.cs">
@@ -77,11 +100,35 @@
     <Compile Include="intForms\frmAbout.Designer.cs">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
+    <Compile Include="intForms\frmChooser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="intForms\frmChooser.Designer.cs">
+      <DependentUpon>frmChooser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="intForms\frmDisassemblyView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="intForms\frmDisassemblyView.Designer.cs">
+      <DependentUpon>frmDisassemblyView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="intForms\frmError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="intForms\frmError.Designer.cs">
+      <DependentUpon>frmError.cs</DependentUpon>
+    </Compile>
     <Compile Include="intForms\frmHexView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="intForms\frmHexView.Designer.cs">
       <DependentUpon>frmHexView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="intForms\frmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="intForms\frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
     </Compile>
     <Compile Include="intForms\frmSecView.cs">
       <SubType>Form</SubType>
@@ -97,8 +144,20 @@
     <EmbeddedResource Include="intForms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="intForms\frmChooser.resx">
+      <DependentUpon>frmChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="intForms\frmDisassemblyView.resx">
+      <DependentUpon>frmDisassemblyView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="intForms\frmError.resx">
+      <DependentUpon>frmError.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="intForms\frmHexView.resx">
       <DependentUpon>frmHexView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="intForms\frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="intForms\frmSecView.resx">
       <DependentUpon>frmSecView.cs</DependentUpon>
@@ -128,6 +187,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Embedded\BeaEngine.dll" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="README.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

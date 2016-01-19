@@ -28,20 +28,24 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
-    public partial class frmHexView : Form
+    public partial class frmProgress : Form
     {
-        private uint addr = 0;
-        private byte[] bitsRead;
-
-        public frmHexView(uint addressToDisassemble, byte[] bytesToRead)
+        public void MaxProgress(int Max)
         {
-            addr = addressToDisassemble;
-            bitsRead = bytesToRead;
-
+            this.pBar1.Maximum = Max;
+        }
+        public void SetCurrentProgress(int Percent, string Operation)
+        {
+            this.pBar1.Value = Percent;
+            this.szProgress.Text = Operation;
+        }
+        public frmProgress(string OperationText)
+        {
             InitializeComponent();
+            this.Text = OperationText;
         }
 
-        private void frmHexView_Load(object sender, EventArgs e)
+        private void frmProgress_Load(object sender, EventArgs e)
         {
 
         }

@@ -28,22 +28,28 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
-    public partial class frmHexView : Form
+    public partial class frmError : ReaperTheme.ReaperForm
     {
-        private uint addr = 0;
-        private byte[] bitsRead;
-
-        public frmHexView(uint addressToDisassemble, byte[] bytesToRead)
+        public frmError(string error)
         {
-            addr = addressToDisassemble;
-            bitsRead = bytesToRead;
-
             InitializeComponent();
+            reaperTextbox1.Text = error;
         }
 
-        private void frmHexView_Load(object sender, EventArgs e)
+        private void frmError_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void reaperButton1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void reaperButton2_Click(object sender, EventArgs e)
+        {
+            Clipboard.Clear();
+            Clipboard.SetText(reaperTextbox1.Text);
         }
     }
 }

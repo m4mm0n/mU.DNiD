@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,24 @@ namespace DNiD2.intClasses
 {
     static class clsExt
     {
+        /// <summary>
+        /// Converts any string byte-array into a ASCII-string...
+        /// </summary>
+        /// <param name="Bytes"></param>
+        /// <returns></returns>
+        public static string Bytes2String(this byte[] Bytes)
+        {
+            var builder = new StringBuilder();
+            foreach (var a in Bytes)
+            {
+                builder.Append(Byte2Char(a).ToString());
+            }
+            return builder.ToString();
+        }
+        private static char Byte2Char(byte Byte)
+        {
+            return Byte >= 32 && Byte < 127 ? (char)Byte : '.';
+        }
         /// <summary>
         /// Removal of white-spaces in search-arrays such as found with PEiD...
         /// </summary>
@@ -57,7 +76,7 @@ namespace DNiD2.intClasses
                 var a = HexToShortArray(toCheck);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -69,14 +88,17 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static bool isBoolean(this string toCheck)
         {
-            try
-            {
-                return bool.Parse(toCheck);
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            //try
+            //{
+            //    return bool.Parse(toCheck);
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
+            var a = false;
+            var b = bool.TryParse(toCheck, out a);
+            return a;
         }
         /// <summary>
         /// Returns the string as a boolean...
