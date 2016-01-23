@@ -69,6 +69,9 @@
       <HintPath>.\ReaperTheme.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="SharpDisasm_mod">
+      <HintPath>.\SharpDisasm_mod.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -88,7 +91,6 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="intClasses\BeaEngine\clsBeaEngine.cs" />
     <Compile Include="intClasses\clsExt.cs" />
     <Compile Include="intClasses\clsIntSignatures.cs" />
     <Compile Include="intClasses\clsNativeDllLoader.cs" />
@@ -187,12 +189,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Embedded\BeaEngine.dll" />
     <Content Include="FodyWeavers.xml" />
     <Content Include="README.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="umbrella_firefox_dock_icon_by_jill___valentine-d38w5k9.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
+      <Project>{26c5f25f-b450-4caf-ad8b-b8d11ae73457}</Project>
+      <Name>Be.Windows.Forms.HexBox</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Embedded\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />

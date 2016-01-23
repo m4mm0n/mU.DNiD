@@ -32,8 +32,8 @@ namespace DNiD2.intForms
     {
         public frmError(string error)
         {
-            InitializeComponent();
-            reaperTextbox1.Text = error;
+            this.InitializeComponent();
+            this.reaperTextbox1.Text = error;
         }
 
         private void frmError_Load(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace DNiD2.intForms
         private void reaperButton2_Click(object sender, EventArgs e)
         {
             Clipboard.Clear();
-            Clipboard.SetText(reaperTextbox1.Text);
+            Clipboard.SetText(this.reaperTextbox1.Text);
         }
     }
 }

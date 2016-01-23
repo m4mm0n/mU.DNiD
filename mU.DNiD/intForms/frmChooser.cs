@@ -35,10 +35,10 @@ namespace DNiD2.intForms
 
         public frmChooser(uint addressToDisassemble, byte[] bytesToRead)
         {
-            addr = addressToDisassemble;
-            bitsRead = bytesToRead;
+            this.addr = addressToDisassemble;
+            this.bitsRead = bytesToRead;
 
-            InitializeComponent();
+            this.InitializeComponent();
 
         }
 
@@ -54,18 +54,23 @@ namespace DNiD2.intForms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (radioButton1.Checked)
+            if (this.radioButton1.Checked)
             {
-                using (var frm = new frmDisassemblyView(addr, bitsRead))
+                using (var frm = new frmDisassemblyView(this.addr, this.bitsRead))
                 {
                     this.Hide();
                     frm.ShowDialog();
                     this.Close();
                 }
             }
-            if (radioButton2.Checked)
+            if (this.radioButton2.Checked)
             {
-                //NOT ADDED YET!
+                using(var frm = new frmHexView(this.addr, this.bitsRead))
+                {
+                    this.Hide();
+                    frm.ShowDialog();
+                    this.Close();
+                }
             }
         }
     }

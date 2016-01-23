@@ -16,16 +16,31 @@ Also, the design is written to resemble PEiD as much as possible of
 one simple reason; simplicity of the mind, thus only the theme is
 basically the difference between DNiD and PEiD ;)
 
+You can even add PEiD's own plugins; %DNiD2_Directory%\plugins\PEiD\
+
+CREDITS:
+^^^^^^^^
+Disassembler : SharpDisasm by spazzaram (slightly modified by mammon)
+HexView      : Be.HexBox by Be
+PluginSupport: mammon (me)
+PatternSearch: mammon (me)
 
 TODO:
 +Add complete x64 & x86 plugin support... (not PEiD ones, or native ones...)
 +Add possibility of using different pattern-finder engines... (thx mr.eXodia for the idea)
-+Add a simple hex-view window...
 +++Got suggestions? Good, send them to me!+++
 
 
 
 VERSION
+
+[2016/01/23] - 2.0.4.0: (by mammon)
+=======================
++Added a simple hex-view window...
++Added Be.Windows.Forms.HexBox as an included project in the solution...
+*Changed disassembler method to use SharpDisasm instead...
+*Minor code-cleanup performed...
+-Removed BeaEngine fully from the project...
 
 [2016/01/19] - 2.0.3.0: (by mammon)
 =======================

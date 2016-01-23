@@ -135,7 +135,7 @@
             this.ShowIcon = false;
             this.ShowIconInTitleBar = false;
             this.ShowInTaskbar = false;
-            this.Text = "DNiD 2 - DisassemblyView [BeaEngine]:";
+            this.Text = "DNiD 2 - DisassemblyView [SharpDisasm]: (Reading 1kb only!)";
             this.onColorBarColorChanged += new System.EventHandler<ReaperTheme.ReaperEvents.OnColorBarColorChanged>(this.frmDisassemblyView_onColorBarColorChanged);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);

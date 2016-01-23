@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+using DNiD2.intClasses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,17 +34,49 @@ namespace DNiD2.intForms
         private uint addr = 0;
         private byte[] bitsRead;
 
+        private BackgroundWorker bw = new BackgroundWorker();
+        private frmProgress fProg;
+
         public frmHexView(uint addressToDisassemble, byte[] bytesToRead)
         {
-            addr = addressToDisassemble;
-            bitsRead = bytesToRead;
+            this.addr = addressToDisassemble;
+            this.bitsRead = bytesToRead;
 
-            InitializeComponent();
+            this.InitializeComponent();
+
+            this.bw.ProgressChanged += this.Bw_ProgressChanged;
+            this.bw.RunWorkerCompleted += this.Bw_RunWorkerCompleted;
+            this.bw.DoWork += this.Bw_DoWork;
+            this.bw.WorkerReportsProgress = true;
+        }
+
+        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.hexBox1.ByteProvider = new Be.Windows.Forms.DynamicByteProvider(this.bitsRead);
+        }
+
+        private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.fProg.Close();
+        }
+
+        private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.fProg.SetCurrentProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void frmHexView_Load(object sender, EventArgs e)
         {
+            this.fProg = new frmProgress("Loading HewView...");
+            //fProg.MaxProgress(64);
+            this.fProg.MaxProgress(64);
+            this.bw.RunWorkerAsync();
+            this.fProg.ShowDialog();
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

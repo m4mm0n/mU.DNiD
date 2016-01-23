@@ -41,7 +41,12 @@ namespace DNiD2.intClasses
             }
             return builder.ToString();
         }
-        private static char Byte2Char(byte Byte)
+        /// <summary>
+        /// Converts a single byte to a standard ASCII-char...
+        /// </summary>
+        /// <param name="Byte"></param>
+        /// <returns></returns>
+        public static char Byte2Char(this byte Byte)
         {
             return Byte >= 32 && Byte < 127 ? (char)Byte : '.';
         }

@@ -4,6 +4,8 @@
     <IncludeAssemblies>
       dnlib
       ReaperTheme
+      Be.Windows.Forms.HexBox
+      SharpDisasm_mod
     </IncludeAssemblies>
   </Costura>  
 </Weavers>

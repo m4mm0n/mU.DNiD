@@ -30,9 +30,13 @@ namespace DNiD2.intForms
 {
     public partial class frmProgress : Form
     {
-        public void MaxProgress(int Max)
+        private delegate void MaxProgressDelegate(int a);
+        public void MaxProgress(int a)
         {
-            this.pBar1.Maximum = Max;
+            if (this.InvokeRequired) this.Invoke(new MaxProgressDelegate(this.MaxProgress), new object[] { a });
+            else
+                this.pBar1.Maximum = a;
+
         }
         public void SetCurrentProgress(int Percent, string Operation)
         {
@@ -41,7 +45,8 @@ namespace DNiD2.intForms
         }
         public frmProgress(string OperationText)
         {
-            InitializeComponent();
+            this.InitializeComponent();
+
             this.Text = OperationText;
         }
 

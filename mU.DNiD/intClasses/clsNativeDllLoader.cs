@@ -42,11 +42,6 @@ namespace DNiD2.intClasses
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, BestFitMapping = false, CharSet = CharSet.Unicode, SetLastError = false, ThrowOnUnmappableChar = false)]
         public delegate int DoMyJob(IntPtr hMainDlg, IntPtr szFname, int empty1, int empty2);
         #endregion
-        #region BeaEngine Delegates
-        public delegate int Disasm([In, Out, MarshalAs(UnmanagedType.LPStruct)] BeaEngine.Disasm disasm);
-        public delegate string BeaEngineVersion();
-        public delegate string BeaEngineRevision();
-        #endregion
         #endregion
 
         public static T load_function<T>(string name, string m_dll) where T : class
