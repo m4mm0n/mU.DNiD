@@ -36,12 +36,10 @@ namespace DNiD2.intClasses
         internal static extern bool FreeLibrary(IntPtr hModule);
         #endregion
         #region Delegates:
-        #region PEiD Delegates
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr LoadDll();
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, BestFitMapping = false, CharSet = CharSet.Unicode, SetLastError = false, ThrowOnUnmappableChar = false)]
         public delegate int DoMyJob(IntPtr hMainDlg, IntPtr szFname, int empty1, int empty2);
-        #endregion
         #endregion
 
         public static T load_function<T>(string name, string m_dll) where T : class

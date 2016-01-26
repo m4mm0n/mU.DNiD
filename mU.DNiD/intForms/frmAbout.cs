@@ -27,10 +27,13 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+
     partial class frmAbout : Form
     {
         public frmAbout()
         {
+            Debug.WriteLine("[frmAbout]");
             this.InitializeComponent();
             this.Text = String.Format("About {0}", this.AssemblyTitle);
             this.labelProductName.Text = this.AssemblyProduct;
@@ -122,7 +125,7 @@ namespace DNiD2.intForms
 
         private void frmAbout_Load(object sender, EventArgs e)
         {
-
+            Debug.WriteLine("[frmAbout_Load]");
         }
     }
 }

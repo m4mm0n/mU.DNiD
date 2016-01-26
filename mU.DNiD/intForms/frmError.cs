@@ -28,26 +28,31 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+
     public partial class frmError : ReaperTheme.ReaperForm
     {
         public frmError(string error)
         {
+            Debug.WriteLine("[frmError]");
             this.InitializeComponent();
             this.reaperTextbox1.Text = error;
         }
 
         private void frmError_Load(object sender, EventArgs e)
         {
-
+            Debug.WriteLine("[frmError_Load]");
         }
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton1_Click]");
             this.Close();
         }
 
         private void reaperButton2_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton2_Click]");
             Clipboard.Clear();
             Clipboard.SetText(this.reaperTextbox1.Text);
         }

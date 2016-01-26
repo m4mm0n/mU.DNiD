@@ -28,12 +28,19 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+
     public partial class frmSecView : Form
     {
-        public frmSecView(dnlib.PE.PEImage myPe)
+        private string myPeFileName;
+        public frmSecView(dnlib.PE.PEImage myPe, string peFileName)
         {
+            Debug.WriteLine("[frmSecView]");
             this.InitializeComponent();
-            foreach(var a in myPe.ImageSectionHeaders)
+            this.myPeFileName = peFileName;
+            foreach (var a in myPe.ImageSectionHeaders)
             {
                 this.reaperListView1.Items.Add(new ListViewItem( new[] {Encoding.ASCII.GetString(a.Name), ((uint)a.VirtualAddress).ToString("X8"), ((uint)a.VirtualSize).ToString("X8"), ((uint)myPe.ToFileOffset(a.VirtualAddress)).ToString("X8"), (a.SizeOfRawData).ToString("X8"), (a.Characteristics).ToString("X8") }));
             }
@@ -41,12 +48,45 @@ namespace DNiD2.intForms
 
         private void frmSecView_Load(object sender, EventArgs e)
         {
-
+            Debug.WriteLine("[frmSecView_Load]");
         }
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton1_Click]");
             this.Close();
+        }
+
+        private void dissassembleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("[dissassembleToolStripMenuItem_Click]");
+            if (this.reaperListView1.SelectedIndices[0] > -1)
+            {
+                var fileBytes = File.ReadAllBytes(this.myPeFileName);
+                var rFileBytes = new byte[int.Parse(this.reaperListView1.SelectedItems[0].SubItems[4].Text, NumberStyles.HexNumber)];
+                Array.Copy(fileBytes, int.Parse(this.reaperListView1.SelectedItems[0].SubItems[3].Text, NumberStyles.HexNumber), rFileBytes, 0, rFileBytes.Length);
+
+                using (var a = new frmDisassemblyView(uint.Parse(this.reaperListView1.SelectedItems[0].SubItems[1].Text, NumberStyles.HexNumber), rFileBytes))
+                {
+                    a.ShowDialog();
+                }
+            }
+        }
+
+        private void hexViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("[hexViewToolStripMenuItem_Click]");
+            if (this.reaperListView1.SelectedIndices[0] > -1)
+            {
+                var fileBytes = File.ReadAllBytes(this.myPeFileName);
+                var rFileBytes = new byte[int.Parse(this.reaperListView1.SelectedItems[0].SubItems[4].Text, NumberStyles.HexNumber)];
+                Array.Copy(fileBytes, int.Parse(this.reaperListView1.SelectedItems[0].SubItems[3].Text, NumberStyles.HexNumber), rFileBytes, 0, rFileBytes.Length);
+
+                using (var a = new frmHexView(uint.Parse(this.reaperListView1.SelectedItems[0].SubItems[1].Text, NumberStyles.HexNumber), rFileBytes))
+                {
+                    a.ShowDialog();
+                }
+            }
         }
     }
 }

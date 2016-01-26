@@ -16,7 +16,7 @@ Also, the design is written to resemble PEiD as much as possible of
 one simple reason; simplicity of the mind, thus only the theme is
 basically the difference between DNiD and PEiD ;)
 
-You can even add PEiD's own plugins; %DNiD2_Directory%\plugins\PEiD\
+You can even add PEiD's own plugins; %DNiD2_Directory%\plugins\
 
 CREDITS:
 ^^^^^^^^
@@ -26,13 +26,23 @@ PluginSupport: mammon (me)
 PatternSearch: mammon (me)
 
 TODO:
-+Add complete x64 & x86 plugin support... (not PEiD ones, or native ones...)
 +Add possibility of using different pattern-finder engines... (thx mr.eXodia for the idea)
 +++Got suggestions? Good, send them to me!+++
 
 
 
 VERSION
+
+[2016/01/26] - 2.0.5.0: (by mammon)
+=======================
++Added sample plugin... (works with both DNiD & PEiD!)
++Added small console-tool to set DNiD2 to Explorer's context menu...
++Added context menu to SecView - you can now directly Disassemble or
+ read any of the section in Hex...
++Added Debug Assertion on debug build on all methods...
+*Fixed so project doesn't copy SharpDisasm to bin dir...
+*Fixed plugins loader code...
+*Changed plugins directory to load from; %dnid2_dir%\plugins\...
 
 [2016/01/23] - 2.0.4.0: (by mammon)
 =======================

@@ -29,6 +29,8 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+
     public partial class frmHexView : Form
     {
         private uint addr = 0;
@@ -39,6 +41,7 @@ namespace DNiD2.intForms
 
         public frmHexView(uint addressToDisassemble, byte[] bytesToRead)
         {
+            Debug.WriteLine("[frmHexView]");
             this.addr = addressToDisassemble;
             this.bitsRead = bytesToRead;
 
@@ -52,23 +55,26 @@ namespace DNiD2.intForms
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
+            Debug.WriteLine("[Bw_DoWork]");
             this.hexBox1.ByteProvider = new Be.Windows.Forms.DynamicByteProvider(this.bitsRead);
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            Debug.WriteLine("[Bw_RunWorkerCompleted]");
             this.fProg.Close();
         }
 
         private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            Debug.WriteLine("[Bw_ProgressChanged]");
             this.fProg.SetCurrentProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void frmHexView_Load(object sender, EventArgs e)
         {
+            Debug.WriteLine("[frmHexView_Load]");
             this.fProg = new frmProgress("Loading HewView...");
-            //fProg.MaxProgress(64);
             this.fProg.MaxProgress(64);
             this.bw.RunWorkerAsync();
             this.fProg.ShowDialog();
@@ -76,6 +82,7 @@ namespace DNiD2.intForms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[button1_Click]");
             this.Close();
         }
     }

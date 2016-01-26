@@ -36,10 +36,10 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.reaperButton1 = new ReaperTheme.Controls.ReaperButton();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.hexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dissassembleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reaperButton1 = new ReaperTheme.Controls.ReaperButton();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +54,7 @@
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6});
+            this.reaperListView1.ContextMenuStrip = this.contextMenuStrip1;
             this.reaperListView1.ForeColor = System.Drawing.Color.Gray;
             this.reaperListView1.FullRowSelect = true;
             this.reaperListView1.GridLines = true;
@@ -98,7 +99,29 @@
             // columnHeader6
             // 
             this.columnHeader6.Text = "Flags:";
-            this.columnHeader6.Width = 94;
+            this.columnHeader6.Width = 86;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dissassembleToolStripMenuItem,
+            this.hexViewToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 70);
+            // 
+            // dissassembleToolStripMenuItem
+            // 
+            this.dissassembleToolStripMenuItem.Name = "dissassembleToolStripMenuItem";
+            this.dissassembleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dissassembleToolStripMenuItem.Text = "Disassemble";
+            this.dissassembleToolStripMenuItem.Click += new System.EventHandler(this.dissassembleToolStripMenuItem_Click);
+            // 
+            // hexViewToolStripMenuItem
+            // 
+            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
+            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hexViewToolStripMenuItem.Text = "HexView";
+            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
             // 
             // reaperButton1
             // 
@@ -117,26 +140,6 @@
             this.reaperButton1.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
             this.reaperButton1.UseVisualStyleBackColor = false;
             this.reaperButton1.Click += new System.EventHandler(this.reaperButton1_Click);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dissassembleToolStripMenuItem,
-            this.hexViewToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(140, 48);
-            // 
-            // hexViewToolStripMenuItem
-            // 
-            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
-            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.hexViewToolStripMenuItem.Text = "HexView";
-            // 
-            // dissassembleToolStripMenuItem
-            // 
-            this.dissassembleToolStripMenuItem.Name = "dissassembleToolStripMenuItem";
-            this.dissassembleToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
-            this.dissassembleToolStripMenuItem.Text = "Disassemble";
             // 
             // frmSecView
             // 

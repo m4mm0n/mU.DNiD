@@ -28,11 +28,14 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+
     public partial class frmProgress : Form
     {
         private delegate void MaxProgressDelegate(int a);
         public void MaxProgress(int a)
         {
+            Debug.WriteLine("[MaxProgress]");
             if (this.InvokeRequired) this.Invoke(new MaxProgressDelegate(this.MaxProgress), new object[] { a });
             else
                 this.pBar1.Maximum = a;
@@ -40,11 +43,13 @@ namespace DNiD2.intForms
         }
         public void SetCurrentProgress(int Percent, string Operation)
         {
+            Debug.WriteLine("[SetCurrentProgress]");
             this.pBar1.Value = Percent;
             this.szProgress.Text = Operation;
         }
         public frmProgress(string OperationText)
         {
+            Debug.WriteLine("[frmProgress]");
             this.InitializeComponent();
 
             this.Text = OperationText;
@@ -52,7 +57,7 @@ namespace DNiD2.intForms
 
         private void frmProgress_Load(object sender, EventArgs e)
         {
-
+            Debug.WriteLine("[frmProgress_Load]");
         }
     }
 }

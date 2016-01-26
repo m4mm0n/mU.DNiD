@@ -24,6 +24,8 @@ using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
+    using System.Diagnostics;
+
     internal sealed class Signatures
     {
         private static bool m_Initialized;
@@ -34,6 +36,7 @@ namespace DNiD2.intClasses
         public static Dictionary<string, Tuple<short[], bool>> SignatureList = new Dictionary<string, Tuple<short[], bool>>();
         public static void Initialize()
         {
+            Debug.WriteLine("[Initialize]");
             if (!Initialized)
             {
                 SignatureList.Add("ConfuserEx -> Ki", Tuple.Create(SignaturesList.sigConfuserEx, false));

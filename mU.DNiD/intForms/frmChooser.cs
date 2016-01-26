@@ -28,6 +28,8 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+
     public partial class frmChooser : Form
     {
         private uint addr = 0;
@@ -35,6 +37,7 @@ namespace DNiD2.intForms
 
         public frmChooser(uint addressToDisassemble, byte[] bytesToRead)
         {
+            Debug.WriteLine("[frmChooser]");
             this.addr = addressToDisassemble;
             this.bitsRead = bytesToRead;
 
@@ -54,6 +57,7 @@ namespace DNiD2.intForms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[button1_Click]");
             if (this.radioButton1.Checked)
             {
                 using (var frm = new frmDisassemblyView(this.addr, this.bitsRead))

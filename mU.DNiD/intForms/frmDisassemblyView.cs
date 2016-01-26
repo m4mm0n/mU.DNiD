@@ -28,6 +28,8 @@ using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
+    using System.Diagnostics;
+
     using dnlib.PE;
 
     using SharpDisasm;
@@ -43,6 +45,8 @@ namespace DNiD2.intForms
 
         public frmDisassemblyView(uint addressToDisassemble, byte[] bytesToRead)
         {
+            Debug.WriteLine("[frmDisassemblyView]");
+
             this.addr = addressToDisassemble;
             this.bitsRead = bytesToRead;
 
@@ -57,66 +61,25 @@ namespace DNiD2.intForms
 
         private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            Debug.WriteLine("[Bw_ProgressChanged]");
             this.fProg.SetCurrentProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            Debug.WriteLine("[Bw_RunWorkerCompleted]");
             this.fProg.Close();
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            //var dis = new Disasm
-            //{
-            //    Archi = 0
-            //};
-            //var curAddr = addr;
-            //var buffy = new UnmanagedBuffer(bitsRead);
-            //dis.VirtualAddr = curAddr;
-            //dis.EIP = new IntPtr(buffy.Ptr.ToInt64());
-            //for (int i = 0; i < 1024; i++)//1kb read :)
-            //{
-            //    byte[] tmp;
-            //    var result = BeaEngine.Disasm(dis);
-            //    if (result == (int)BeaConstants.SpecialInfo.UNKNOWN_OPCODE)
-            //    {
-            //        result = 1;
-            //        tmp = new byte[result];
-            //        try
-            //        {
-            //            Array.Copy(bitsRead, i, tmp, 0, tmp.Length);
-            //        }
-            //        catch { }
-            //        WriteDis("0x" + curAddr.ToString("X8"), toHex(tmp), "??", 0);
-            //        curAddr += (uint)result;
-            //        dis.EIP = new IntPtr(dis.EIP.ToInt64() + result);
-
-            //        bw.ReportProgress(i, "Added: Unknown code...");
-            //    }
-            //    else
-            //    {
-            //        tmp = new byte[result];
-            //        try
-            //        {
-            //            Array.Copy(bitsRead, i, tmp, 0, tmp.Length);
-            //        }
-            //        catch { }
-            //        WriteDis("0x" + curAddr.ToString("X8"), toHex(tmp), dis.CompleteInstr, (BeaConstants.BranchType)dis.Instruction.BranchType);
-            //        curAddr += (uint)result;
-            //        dis.EIP = new IntPtr(dis.EIP.ToInt64() + result);
-
-            //        bw.ReportProgress(i, "Added: " + dis.CompleteInstr);
-            //    }
-
-            //    RefreshListView();
-            //}
-            //var a = new PEImage(bitsRead);
+            Debug.WriteLine("[Bw_DoWork]");
             this.DisassembleTarget(this.bitsRead, ArchitectureMode.x86_32);
         }
 
         private void DisassembleTarget(byte[] fileBytes, ArchitectureMode mode)
         {
+            Debug.WriteLine("[DisassembleTarget]");
             // Create the disassembler
             var disasm = new Disassembler(fileBytes, 1024, mode, this.addr, true, Vendor.Any);
             var dis = disasm.Disassemble();
@@ -134,6 +97,7 @@ namespace DNiD2.intForms
 
         private ArchitectureMode GetArchitecture(PEImage a)
         {
+            Debug.WriteLine("[GetArchitecture]");
             switch (a.ImageNTHeaders.FileHeader.Machine)
             {
                 case Machine.I386:
@@ -150,6 +114,7 @@ namespace DNiD2.intForms
 
         private void FrmDisassemblyView_Load(object sender, EventArgs e)
         {
+            Debug.WriteLine("[FrmDisassemblyView_Load]");
             this.fProg = new frmProgress("Loading DisassemblyView...");
             //fProg.MaxProgress(1024);
             this.bw.RunWorkerAsync();
@@ -159,6 +124,7 @@ namespace DNiD2.intForms
         private delegate void RefreshListViewDelegate();
         private void RefreshListView()
         {
+            Debug.WriteLine("[RefreshListView]");
             if (this.InvokeRequired)
                 this.Invoke(new RefreshListViewDelegate(this.RefreshListView));
             else this.listView1.Refresh();
@@ -166,6 +132,7 @@ namespace DNiD2.intForms
 
         private static string toHex(byte[] bits)
         {
+            Debug.WriteLine("[toHex]");
             var toRet = "";
             foreach (byte bit in bits)
             {
@@ -176,6 +143,7 @@ namespace DNiD2.intForms
 
         private void WriteDis(string addr, string bytes1, string instruction, Instruction branchType)
         {
+            Debug.WriteLine("[WriteDis]");
             var item = new ListViewItem(addr);
             item.SubItems.Add(bytes1);
 
@@ -264,6 +232,7 @@ namespace DNiD2.intForms
         private delegate void AddItemToListDelegate(ListViewItem a);
         private void AddItemToList(ListViewItem myItem)
         {
+            Debug.WriteLine("[AddItemToList]");
             if (this.InvokeRequired)
                 this.Invoke(new AddItemToListDelegate(this.AddItemToList), new object[] { myItem });
             else this.listView1.Items.Add(myItem);
@@ -276,23 +245,27 @@ namespace DNiD2.intForms
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton1_Click]");
             this.Close();
         }
 
         private void copyAddressToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[copyAddressToolStripMenuItem_Click]");
             Clipboard.Clear();
             Clipboard.SetText(this.listView1.SelectedItems[0].SubItems[0].Text);
         }
 
         private void copyBytesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[copyBytesToolStripMenuItem_Click]");
             Clipboard.Clear();
             Clipboard.SetText(this.listView1.SelectedItems[0].SubItems[1].Text);
         }
 
         private void copyDisassemblyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[copyDisassemblyToolStripMenuItem_Click]");
             Clipboard.Clear();
             Clipboard.SetText(this.listView1.SelectedItems[0].SubItems[2].Text);
         }

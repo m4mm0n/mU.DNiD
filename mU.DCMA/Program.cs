@@ -16,40 +16,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using DNiD2;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace DNiDGUI
+namespace mU.DCMA
 {
-    using System.Diagnostics;
+    using Microsoft.Win32;
 
-    static class Program
+
+    /// <summary>
+    /// Just a small console-app to set DNiD2 to the Windows Explorer's Context Menu...
+    /// </summary>
+    class Program
     {
-        [STAThread]
         static void Main(string[] args)
         {
-            Debug.WriteLine("[Main]");
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            if (args.Length > 0)
+            if (Registry.ClassesRoot.CreateSubKey("*\\shell\\Scan with DNiD 2") != null)
             {
-                using (var form1 = new frmMain(args[0]))
+                var cmd = Registry.ClassesRoot.CreateSubKey("*\\shell\\Scan with DNiD 2\\command");
+                if (cmd != null)
                 {
-                    Application.Run(form1);
+                    cmd.SetValue("", Environment.CurrentDirectory + "\\DNiD2.exe %1");
+                    Console.WriteLine("All done!");
+                    Console.ReadKey();
                 }
-            }
-            else
-            {
-                using (var form1 = new frmMain())
+                else
                 {
-                    Application.Run(form1);
+                    Console.WriteLine("Something went wrong.... :/");
+                    Console.ReadKey();
                 }
             }
         }

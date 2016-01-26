@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNiDGUI", "mU.DNiD\DNiDGUI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Be.Windows.Forms.HexBox", "Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj", "{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mU.DNiD2.Plugin_Sample", "mU.DNiD2.Plugin_Sample\mU.DNiD2.Plugin_Sample.csproj", "{6ED681AA-1544-40E3-83A7-B5861CE724F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mU.DCMA", "mU.DCMA\mU.DCMA.csproj", "{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,22 @@ Global
 		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Release|x86.ActiveCfg = Release|Any CPU
 		{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}.Release|x86.Build.0 = Release|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Debug|x86.Build.0 = Debug|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Release|x86.ActiveCfg = Release|Any CPU
+		{6ED681AA-1544-40E3-83A7-B5861CE724F2}.Release|x86.Build.0 = Release|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D697A7D1-4C35-42ED-B12C-B8113EA37B4A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

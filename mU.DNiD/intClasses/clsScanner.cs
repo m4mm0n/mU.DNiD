@@ -26,6 +26,8 @@ using dnlib.PE;
 
 namespace DNiD2.intClasses
 {
+    using System.Diagnostics;
+
     internal static class clsScanner
     {
         internal static Dictionary<string, Tuple<short[], bool>> mySigs;
@@ -40,6 +42,7 @@ namespace DNiD2.intClasses
         public static void SetSignatureDB(bool useInternalOnly, bool useExternalOnly, bool useBothIntExt,
             [Optional] string externalDB)
         {
+            Debug.WriteLine("[SetSignatureDB]");
             Signatures.Initialize();
 
             if (useInternalOnly)
@@ -56,6 +59,7 @@ namespace DNiD2.intClasses
         /// <returns>Protector detected</returns>
         public static string Scan(byte[] lpBuffer)
         {
+            Debug.WriteLine("[Scan]");
             var toReturn = "Unknown or no protection!";
             Parallel.ForEach(mySigs, pair =>
             {
@@ -87,6 +91,7 @@ namespace DNiD2.intClasses
         /// <returns>Protector detected</returns>
         public static string Scan(string filePath)
         {
+            Debug.WriteLine("[Scan]");
             return Scan(File.ReadAllBytes(filePath));
         }
 
@@ -98,6 +103,7 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         internal static Dictionary<string, Tuple<short[], bool>> CreateExt(bool useIntToo, string[] sigListX)
         {
+            Debug.WriteLine("[CreateExt]");
             var sigList = new Dictionary<string, Tuple<short[], bool>>();
 
             var i = 0;
@@ -137,6 +143,7 @@ namespace DNiD2.intClasses
         }
         internal static bool SearchBytes(byte[] file, short[] signature, long startOffset)
         {
+            Debug.WriteLine("[SearchBytes]");
             var wildCards = new bool[signature.Length];
             for (var i = 0; i < signature.Length; i++)
             {
@@ -153,8 +160,8 @@ namespace DNiD2.intClasses
         }
         internal static bool FindPattern(byte[] Body, short[] Pattern, bool[] Wild, int start = 0)
         {
+            Debug.WriteLine("[FindPattern]");
             var foundIndex = -1;
-            var match = false;
 
             if (Body.Length > 0
                 && Pattern.Length > 0
@@ -164,7 +171,7 @@ namespace DNiD2.intClasses
                 {
                     if (Wild[0] || (Body[index] == Pattern[0]))
                     {
-                        match = true;
+                        var match = true;
                         for (var index2 = 1; index2 <= Pattern.Length - 1; index2++)
                         {
                             if (!Wild[index2] &&

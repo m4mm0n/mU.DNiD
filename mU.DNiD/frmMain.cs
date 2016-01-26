@@ -33,6 +33,8 @@ using ReaperTheme;
 
 namespace DNiDGUI
 {
+    using System.Diagnostics;
+
     public partial class frmMain : ReaperForm
     {
         private readonly BackgroundWorker bw;
@@ -40,34 +42,35 @@ namespace DNiDGUI
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            Debug.WriteLine("[Bw_RunWorkerCompleted]");
             this.reaperButton7.Enabled = true;
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
+            Debug.WriteLine("[Bw_DoWork]");
             this.ScanFile();
         }
 
         private static string GetFilename(DragEventArgs e)
         {
-            var ret = "";
-            var filename = string.Empty;
-
+            Debug.WriteLine("[GetFilename]");
             if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
             {
                 var data = e.Data.GetData("FileNameW") as Array;
                 if (data != null && (data.Length == 1) && data.GetValue(0) is string)
                 {
-                    filename = ((string[]) data)[0x0];
+                    var filename = ((string[]) data)[0x0];
                     var ext = Path.GetExtension(filename).ToLower();
-                    ret = filename;
+                    return filename;
                 }
             }
-            return ret;
+            return "";
         }
 
         private static string GetSectionHeaderName(uint rva, PEImage myPe)
         {
+            Debug.WriteLine("[GetSectionHeaderName]");
             var myRet = "";
             Parallel.ForEach(myPe.ImageSectionHeaders, section =>
             {
@@ -86,6 +89,7 @@ namespace DNiDGUI
 
         private void ScanFile()
         {
+            Debug.WriteLine("[ScanFile]");
             if (this.InvokeRequired) this.Invoke(new ScanFileDelegate(this.ScanFile));
             else
             {
@@ -136,6 +140,7 @@ namespace DNiDGUI
 
         public frmMain([Optional] string File2Scan)
         {
+            Debug.WriteLine("[frmMain]");
             this.bw = new BackgroundWorker();
             this.bw.DoWork += this.Bw_DoWork;
             this.bw.RunWorkerCompleted += this.Bw_RunWorkerCompleted;
@@ -156,6 +161,7 @@ namespace DNiDGUI
 
         private void FrmMain_DragEnter(object sender, DragEventArgs e)
         {
+            Debug.WriteLine("[FrmMain_DragEnter]");
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy; // Okay
             else
@@ -164,6 +170,7 @@ namespace DNiDGUI
 
         private void FrmMain_DragDrop(object sender, DragEventArgs e)
         {
+            Debug.WriteLine("[FrmMain_DragDrop]");
             if (!this.bw.IsBusy)
             {
                 this.txtEntrypoint.Text = "";
@@ -183,8 +190,9 @@ namespace DNiDGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            clsPluginSupport.InitPeidPlugins();
-            if (clsPluginSupport.plugPEiD.Count > 0) this.AddNativePlugins(clsPluginSupport.plugPEiD);
+            Debug.WriteLine("[Form1_Load]");
+            clsPluginSupport.InitPlugins();
+            if (clsPluginSupport.plugins.Count > 0) this.AddNativePlugins(clsPluginSupport.plugins);
         }
 
         #endregion
@@ -193,17 +201,20 @@ namespace DNiDGUI
 
         private void reaperButton7_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton7_Click]");
             this.reaperButton7.Enabled = false;
             this.bw.RunWorkerAsync();
         }
 
         private void reaperButton5_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton5_Click]");
             Application.Exit();
         }
 
         private void reaperButton6_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton6_Click]");
             using (var frm = new frmAbout())
             {
                 frm.ShowDialog();
@@ -212,6 +223,7 @@ namespace DNiDGUI
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[reaperButton1_Click]");
             using (var a = new OpenFileDialog())
             {
                 if (this.txtFilePath.Text.Length > 0)
@@ -227,16 +239,18 @@ namespace DNiDGUI
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[button1_Click]");
             if (this.mnuPlugins.Items.Count > 0) this.mnuPlugins.Show(this.button1, this.button1.PointToClient(Cursor.Position));
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[button2_Click]");
             if (this.txtFilePath.Text.Length > 0)
             {
                 using (var a = new PEImage(File.ReadAllBytes(this.txtFilePath.Text)))
                 {
-                    using (var frm = new frmSecView(a))
+                    using (var frm = new frmSecView(a, this.txtFilePath.Text))
                     {
                         frm.ShowDialog();
                     }
@@ -246,6 +260,7 @@ namespace DNiDGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[button3_Click]");
             var a = File.ReadAllBytes(this.txtFilePath.Text);
             var b = new byte[1024];
             Array.Copy(a, uint.Parse(this.txtFileOffset.Text, NumberStyles.HexNumber), b, 0, 1024);
@@ -257,11 +272,13 @@ namespace DNiDGUI
 
         private void button4_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("[button4_Click]");
             MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void mnuPlugins_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            Debug.WriteLine("[mnuPlugins_ItemClicked]");
             this.GetNativeFunction(e.ClickedItem.Text);
         }
 
@@ -271,6 +288,7 @@ namespace DNiDGUI
 
         private void AddNativePlugins(Dictionary<string, string> myPlugins)
         {
+            Debug.WriteLine("[AddNativePlugins]");
             foreach (var a in myPlugins)
             {
                 this.mnuPlugins.Items.Add(a.Key);
@@ -279,12 +297,13 @@ namespace DNiDGUI
 
         private void GetNativeFunction(string plugName)
         {
+            Debug.WriteLine("[GetNativeFunction]");
             var b = this.txtFilePath.Text;
-            foreach (var a in clsPluginSupport.plugPEiD)
+            foreach (var a in clsPluginSupport.plugins)
             {
                 if (a.Key == plugName)
                 {
-                    clsPluginSupport.doPeidPluginJob(a.Value, b, this.Handle);
+                    clsPluginSupport.doPluginJob(a.Value, b, this.Handle);
                     break;
                 }
             }

@@ -37,9 +37,8 @@
             this.szProgress.AutoSize = true;
             this.szProgress.Location = new System.Drawing.Point(12, 52);
             this.szProgress.Name = "szProgress";
-            this.szProgress.Size = new System.Drawing.Size(35, 13);
+            this.szProgress.Size = new System.Drawing.Size(0, 13);
             this.szProgress.TabIndex = 1;
-            this.szProgress.Text = "label1";
             // 
             // pBar1
             // 

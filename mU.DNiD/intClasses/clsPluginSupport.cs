@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
+
     static class clsPluginSupport
     {
         [DllImport("kernel32.dll")]
@@ -35,30 +36,26 @@ namespace DNiD2.intClasses
         [DllImport("kernel32.dll")]
         internal static extern bool FreeLibrary(IntPtr hModule);
 
-        //TODO: Add support for both x86 & x64 plugins - both Native & .NET
+        /// <summary>
+        /// The complete plugins list that is present...
+        /// </summary>
+        public static Dictionary<string, string> plugins = new Dictionary<string, string>();
 
+        #region Plugins Support Methods:
         /// <summary>
-        /// The complete PEiD plugins list that is present...
+        /// Initiates the plugins if they are present in
+        /// %DNiD2_Directory%\plugins\...
         /// </summary>
-        public static Dictionary<string, string> plugPEiD = new Dictionary<string, string>();
-        /// <summary>
-        /// The complete DNiD plugins list that is present...
-        /// </summary>
-        public static Dictionary<string, string> plugDNiD = new Dictionary<string, string>();
-
-        #region PEiD Plugins Support Methods:
-        /// <summary>
-        /// Initiates the PEiD plugins if they are present in
-        /// %DNiD2_Directory%\plugins\PEiD\...
-        /// </summary>
-        public static void InitPeidPlugins()
+        public static void InitPlugins()
         {
-            var a = Directory.GetFiles(Environment.CurrentDirectory + @"\plugins\PEiD\");
+            var a = Directory.GetFiles(Environment.CurrentDirectory + @"\plugins\");
             foreach(var b in a)
             {
-                var c = LoadDllInfo(b);
-                if (c.Length > 0)
-                    AddPeidPlugin(c, b);
+                if (b.EndsWith(".dll"))
+                {
+                    var c = LoadDllInfo(b);
+                    if (c.Length > 0) AddPlugin(c, b);
+                }
             }
         }
         /// <summary>
@@ -67,7 +64,7 @@ namespace DNiD2.intClasses
         /// <param name="dllName">Full Path of Plugin...</param>
         /// <param name="szFileName">Filename that is present in DNiD...</param>
         /// <param name="hWnd">Handle of DNiD's main-window...</param>
-        public static void doPeidPluginJob(string dllName, string szFileName, IntPtr hWnd)
+        public static void doPluginJob(string dllName, string szFileName, IntPtr hWnd)
         {
             try
             {
@@ -76,32 +73,31 @@ namespace DNiD2.intClasses
             }
             catch (Exception ex)
             {
-                using (var frm = new intForms.frmError("TargetSite: " + ex.TargetSite.Name + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
+                using (var frm = new intForms.frmError("[doPluginJob]" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
                 {
                     frm.ShowDialog();
                 }
             }
         }
         #region Private Methods:
-        private static void AddPeidPlugin(string DllName, string From)
+        private static void AddPlugin(string DllName, string From)
         {
-            if (!plugPEiD.ContainsKey(DllName))
+            if (!plugins.ContainsKey(DllName))
             {
-                plugPEiD.Add(DllName, From);
+                plugins.Add(DllName, From);
             }
         }
-        private static string LoadDllInfo(string peidDll)
+        private static string LoadDllInfo(string pluginDll)
         {
             try
             {
-                var dllHandler = IntPtr.Zero;
-                var a = clsNativeDllLoader.load_function<clsNativeDllLoader.LoadDll>("LoadDll", peidDll);
+                var a = clsNativeDllLoader.load_function<clsNativeDllLoader.LoadDll>("LoadDll", pluginDll);
                 var b = Marshal.PtrToStringAnsi(a());
                 return b;
             }
             catch (Exception ex)
             {
-                using (var frm = new intForms.frmError("TargetSite: " + ex.TargetSite.Name + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
+                using (var frm = new intForms.frmError("[LoadDllInfo]" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
                 {
                     frm.ShowDialog();
                 }
