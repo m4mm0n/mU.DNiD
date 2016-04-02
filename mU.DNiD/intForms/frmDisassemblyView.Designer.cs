@@ -54,7 +54,7 @@
             this.reaperButton1.OverrideHoverColor = false;
             this.reaperButton1.Size = new System.Drawing.Size(97, 35);
             this.reaperButton1.TabIndex = 1;
-            this.reaperButton1.Text = ".close.";
+            this.reaperButton1.Text = "close";
             this.reaperButton1.Theme = ReaperTheme.ReaperEnums.ReaperTheme.Dark;
             this.reaperButton1.UseVisualStyleBackColor = false;
             this.reaperButton1.Click += new System.EventHandler(this.reaperButton1_Click);

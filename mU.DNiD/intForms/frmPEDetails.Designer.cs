@@ -1,6 +1,6 @@
 ﻿namespace DNiD2.intForms
 {
-    partial class frmHexView
+    partial class frmPEDetails
     {
         /// <summary>
         /// Required designer variable.
@@ -28,49 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.biList = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.hexBox1 = new Be.Windows.Forms.HexBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.biList);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(349, 344);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Information";
+            // 
+            // biList
+            // 
+            this.biList.FormattingEnabled = true;
+            this.biList.Location = new System.Drawing.Point(6, 19);
+            this.biList.Name = "biList";
+            this.biList.Size = new System.Drawing.Size(336, 316);
+            this.biList.TabIndex = 0;
             // 
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Location = new System.Drawing.Point(381, 325);
+            this.button1.Location = new System.Drawing.Point(127, 367);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(96, 34);
-            this.button1.TabIndex = 2;
+            this.button1.Size = new System.Drawing.Size(122, 29);
+            this.button1.TabIndex = 1;
             this.button1.Text = "close";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // hexBox1
-            // 
-            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.hexBox1.Location = new System.Drawing.Point(12, 12);
-            this.hexBox1.Name = "hexBox1";
-            this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexBox1.Size = new System.Drawing.Size(846, 307);
-            this.hexBox1.TabIndex = 3;
-            // 
-            // frmHexView
+            // frmPEDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(870, 363);
-            this.Controls.Add(this.hexBox1);
+            this.ClientSize = new System.Drawing.Size(373, 406);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "frmHexView";
-            this.ShowInTaskbar = false;
+            this.Name = "frmPEDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DNiD 2 - HexView [Be.HeBox]: (Reading 1kb only!)";
-            this.Load += new System.EventHandler(this.frmHexView_Load);
+            this.Text = "PE Details:";
+            this.Load += new System.EventHandler(this.frmPEDetails_Load);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ListBox biList;
         private System.Windows.Forms.Button button1;
-        private Be.Windows.Forms.HexBox hexBox1;
     }
 }

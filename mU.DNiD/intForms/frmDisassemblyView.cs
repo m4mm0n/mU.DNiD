@@ -17,13 +17,9 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DNiD2.intForms
@@ -81,17 +77,19 @@ namespace DNiD2.intForms
         {
             Debug.WriteLine("[DisassembleTarget]");
             // Create the disassembler
-            var disasm = new Disassembler(fileBytes, 1024, mode, this.addr, true, Vendor.Any);
-            var dis = disasm.Disassemble();
-            var i = dis.Count();
-            this.fProg.MaxProgress(i);
-            var o = 0;
-            // Disassemble each instruction and output to console
-            foreach (var insn in dis)
+            using (var disasm = new Disassembler(fileBytes, 1024, mode, this.addr, true, Vendor.Any))
             {
-                this.WriteDis(insn.Offset.ToString("X8"), toHex(insn.Bytes), insn.ToString(), insn);
-                this.bw.ReportProgress(o, "Added: " + insn.ToString());
-                o++;
+                var dis = disasm.Disassemble();
+                var i = dis.Count();
+                this.fProg.MaxProgress(i);
+                var o = 0;
+                // Disassemble each instruction and output to console
+                foreach (var insn in dis)
+                {
+                    this.WriteDis(insn.Offset.ToString("X8"), toHex(insn.Bytes), insn.ToString(), insn);
+                    this.bw.ReportProgress(o, "Added: " + insn.ToString());
+                    o++;
+                }
             }
         }
 
@@ -102,13 +100,10 @@ namespace DNiD2.intForms
             {
                 case Machine.I386:
                     return ArchitectureMode.x86_16;
-                    break;
                 case Machine.IA64:
                     return ArchitectureMode.x86_64;
-                    break;
                 default:
                     return ArchitectureMode.x86_16;
-                    break;
             }
         }
 

@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,10 +96,10 @@ namespace DNiDGUI
                 {
                     using (var a = new PEImage(File.ReadAllBytes(this.txtFilePath.Text)))
                     {
-                        if (File.Exists(Environment.CurrentDirectory + @"\external_sigs.txt"))
+                        if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\external_sigs.txt"))
                         {
                             clsScanner.SetSignatureDB(false, false, true,
-                                Environment.CurrentDirectory + @"\external_sigs.txt");
+                                Path.GetDirectoryName(Application.ExecutablePath) + "\\external_sigs.txt");
                             this.reaperTextbox8.Text = clsScanner.Scan(this.txtFilePath.Text).Trim();
                         }
                         else
@@ -123,8 +122,9 @@ namespace DNiDGUI
                                              a.ImageNTHeaders.OptionalHeader.MinorLinkerVersion;
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.WriteLine("[ScanFile] Exception: " + ex.Message);
                     this.reaperTextbox8.Text = "File not supported!";
                 }
             }
@@ -273,12 +273,16 @@ namespace DNiDGUI
         private void button4_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("[button4_Click]");
-            MessageBox.Show("Not implemented yet!", "Not Yet", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            using (var frm = new frmPEDetails(new PEImage(File.ReadAllBytes(this.txtFilePath.Text))))
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void mnuPlugins_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             Debug.WriteLine("[mnuPlugins_ItemClicked]");
+            this.mnuPlugins.Close();
             this.GetNativeFunction(e.ClickedItem.Text);
         }
 
@@ -303,7 +307,7 @@ namespace DNiDGUI
             {
                 if (a.Key == plugName)
                 {
-                    clsPluginSupport.doPluginJob(a.Value, b, this.Handle);
+                    clsPluginSupport.doPluginJob(a.Value, b, this);
                     break;
                 }
             }

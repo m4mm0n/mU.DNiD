@@ -39,6 +39,10 @@ namespace DNiD2.intClasses
             Debug.WriteLine("[Initialize]");
             if (!Initialized)
             {
+                SignatureList.Add("EADRM/OriginStub V1 -> Electronic Arts", Tuple.Create(SignaturesList.sigEaDrmV1, false));
+                SignatureList.Add("EADRM/OriginStub V2A -> Electronic Arts", Tuple.Create(SignaturesList.sigEaDrmV2a, false));
+                SignatureList.Add("EADRM/OriginStub V2B -> Electronic Arts", Tuple.Create(SignaturesList.sigEaDrmV2b, false));
+                SignatureList.Add("EADRM/OriginStub V3/Denuvo -> Electronic Arts", Tuple.Create(SignaturesList.sigEaDrmV3Denvuo, false));
                 SignatureList.Add("ConfuserEx -> Ki", Tuple.Create(SignaturesList.sigConfuserEx, false));
                 SignatureList.Add("AssemblyInvoke", Tuple.Create(SignaturesList.sigAssemblyInvoke, false));
                 SignatureList.Add("Dotfuscator -> PreEmptive Solutions", Tuple.Create(SignaturesList.sigDotfuscator, false));
@@ -128,6 +132,22 @@ namespace DNiD2.intClasses
         }
         internal sealed class SignaturesList
         {
+            public static readonly short[] sigEaDrmV1 = new short[] {
+                0x00, 0x00, 0x49, 0x52, 0x45, 0x57
+            };
+
+            public static readonly short[] sigEaDrmV2a = new short[] {
+                0x41, 0x45, 0x36, 0x34
+            };
+
+            public static readonly short[] sigEaDrmV2b = new short[] {
+                0x58, 0x45, 0x33, 0x34
+            };
+
+            public static readonly short[] sigEaDrmV3Denvuo = new short[] {
+                0x2E, 0x6F, 0x6F, 0x61
+            };
+
             public static readonly short[] sigConfuserEx = new short[] {
                 0x43, 0x6F, 0x6E, 0x66, 0x75, 0x73, 0x65, 0x72, 0x45, 0x78, 0x20, 0x76
             };

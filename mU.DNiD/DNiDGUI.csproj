@@ -131,6 +131,12 @@
     <Compile Include="intForms\frmHexView.Designer.cs">
       <DependentUpon>frmHexView.cs</DependentUpon>
     </Compile>
+    <Compile Include="intForms\frmPEDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="intForms\frmPEDetails.Designer.cs">
+      <DependentUpon>frmPEDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="intForms\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="intForms\frmHexView.resx">
       <DependentUpon>frmHexView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="intForms\frmPEDetails.resx">
+      <DependentUpon>frmPEDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="intForms\frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>

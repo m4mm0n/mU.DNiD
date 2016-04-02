@@ -26,6 +26,9 @@ using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
+    using System.ComponentModel;
+    using System.Security.Permissions;
+    using System.Windows.Forms;
 
     static class clsPluginSupport
     {
@@ -35,6 +38,10 @@ namespace DNiD2.intClasses
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string procname);
         [DllImport("kernel32.dll")]
         internal static extern bool FreeLibrary(IntPtr hModule);
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        internal static extern IntPtr GetActiveWindow();
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        internal static extern bool IsWindow(HandleRef hWnd);
 
         /// <summary>
         /// The complete plugins list that is present...
@@ -48,7 +55,7 @@ namespace DNiD2.intClasses
         /// </summary>
         public static void InitPlugins()
         {
-            var a = Directory.GetFiles(Environment.CurrentDirectory + @"\plugins\");
+            var a = Directory.GetFiles(Path.GetDirectoryName(Application.ExecutablePath) + "\\plugins\\");
             foreach(var b in a)
             {
                 if (b.EndsWith(".dll"))
@@ -63,11 +70,12 @@ namespace DNiD2.intClasses
         /// </summary>
         /// <param name="dllName">Full Path of Plugin...</param>
         /// <param name="szFileName">Filename that is present in DNiD...</param>
-        /// <param name="hWnd">Handle of DNiD's main-window...</param>
-        public static void doPluginJob(string dllName, string szFileName, IntPtr hWnd)
+        /// <param name="myWindowControl">Handle of DNiD's main-window...</param>
+        public static void doPluginJob(string dllName, string szFileName, Control myWindowControl)
         {
             try
             {
+                var hWnd = GetSafeHandle(myWindowControl);
                 var a = clsNativeDllLoader.load_function<clsNativeDllLoader.DoMyJob>("DoMyJob", dllName);                
                 var b = a(hWnd, Marshal.StringToHGlobalAnsi(szFileName), 0, 0);
             }
@@ -80,6 +88,22 @@ namespace DNiD2.intClasses
             }
         }
         #region Private Methods:
+        internal static IntPtr GetSafeHandle(IWin32Window window)
+        {
+            var intPtr = IntPtr.Zero;
+            var control = window as Control;
+            if (control != null)
+            {
+                return control.Handle;
+            }
+            new UIPermission(UIPermissionWindow.AllWindows).Demand();
+            intPtr = window.Handle;
+            if (intPtr == IntPtr.Zero || IsWindow(new HandleRef(null, intPtr)))
+            {
+                return intPtr;
+            }
+            throw new Win32Exception(6);
+        }
         private static void AddPlugin(string DllName, string From)
         {
             if (!plugins.ContainsKey(DllName))

@@ -33,6 +33,13 @@ TODO:
 
 VERSION
 
+[2016/04/02] - 2.0.6.0: (by mammon)
+=======================
++Added 4 more signatures to the internal database...
++Added a simple PE Details form...
+*Fixed issue where menu didn't close when loading plugin...
+*Fixed issue when using context menu to scan binary, not loading plugins...
+
 [2016/01/26] - 2.0.5.0: (by mammon)
 =======================
 +Added sample plugin... (works with both DNiD & PEiD!)

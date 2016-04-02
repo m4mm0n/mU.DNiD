@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 namespace DNiD2.intClasses
 {
     using System.Diagnostics;
+    using System.Globalization;
 
     static class clsExt
     {
@@ -94,20 +95,37 @@ namespace DNiD2.intClasses
             }
         }
         /// <summary>
+        /// Determines wether the input is an unsigned integer or not
+        /// </summary>
+        /// <param name="toCheck"></param>
+        /// <returns></returns>
+        public static uint isUint(this string toCheck)
+        {
+            Debug.WriteLine("[isUint]");
+            var a = (uint)0xFFFFFFFF;
+            var b = uint.TryParse(toCheck, isHex(toCheck), CultureInfo.CurrentCulture, out a);
+            return a;
+        }
+        /// <summary>
+        /// Determines wether to return NumberStyles.HexNumber or NumberStyles.Any (it excempts Hex on Any!)
+        /// </summary>
+        /// <param name="toCheck"></param>
+        /// <returns></returns>
+        public static NumberStyles isHex(this string toCheck)
+        {
+            Debug.WriteLine("[isHex]");
+            if(System.Text.RegularExpressions.Regex.IsMatch(toCheck, @"\A\b[0-9a-fA-F]+\b\Z"))
+                return NumberStyles.HexNumber;
+
+            return NumberStyles.Any;
+        }
+        /// <summary>
         /// Determines wether the string is a boolean or not...
         /// </summary>
         /// <param name="toCheck"></param>
         /// <returns></returns>
         public static bool isBoolean(this string toCheck)
         {
-            //try
-            //{
-            //    return bool.Parse(toCheck);
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
             Debug.WriteLine("[isBoolean]");
             var a = false;
             var b = bool.TryParse(toCheck, out a);
