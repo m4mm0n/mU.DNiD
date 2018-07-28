@@ -17,8 +17,8 @@ basically the difference between DNiD and PEiD ;)
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Either me (mammon), or if your lucky - get the hold of Rue ;)
+* Ask around the community of RCE - however, I myself am retired from that scene!
 
 ### Build ###
-[![Build status](https://ci.appveyor.com/api/projects/status/s4rff1rmfh9295pv?svg=true)](https://ci.appveyor.com/project/styx2007/mu-dnid)
+[![Build status](https://ci.appveyor.com/api/projects/status/91kn4l9idn5qocaq?svg=true)](https://ci.appveyor.com/project/m4mm0n/mu-dnid)
