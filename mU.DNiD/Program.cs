@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,19 @@
 
 using System;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiDGUI
 {
-    using System.Diagnostics;
-
     static class Program
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.Program");
+
         [STAThread]
         static void Main(string[] args)
         {
-            Debug.WriteLine("[Main]");
+            //Debug.WriteLine("[Main]");
+            log.Log(LogType.Normal, "Main");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

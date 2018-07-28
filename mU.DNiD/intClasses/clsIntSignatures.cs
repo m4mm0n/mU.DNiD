@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
-    using System.Diagnostics;
 
     internal sealed class Signatures
     {
         private static bool m_Initialized;
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.Signatures");
         /// <summary>
         /// A quite simple setup of the signatures (originally added by Rue, except for the ConfuserEx one...);
         /// Protection Name (String), Search-Array (Short-Array), Start At EP (Bool)
@@ -36,7 +33,8 @@ namespace DNiD2.intClasses
         public static Dictionary<string, Tuple<short[], bool>> SignatureList = new Dictionary<string, Tuple<short[], bool>>();
         public static void Initialize()
         {
-            Debug.WriteLine("[Initialize]");
+            //Debug.WriteLine("[Initialize]");
+            log.Log(LogType.Normal, "Initialize");
             if (!Initialized)
             {
                 SignatureList.Add("EADRM/OriginStub V1 -> Electronic Arts", Tuple.Create(SignaturesList.sigEaDrmV1, false));

@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,13 +17,9 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
@@ -31,9 +27,13 @@ namespace DNiD2.intForms
 
     partial class frmAbout : Form
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmAbout");
+
         public frmAbout()
         {
-            Debug.WriteLine("[frmAbout]");
+            //Debug.WriteLine("[frmAbout]");
+            log.Log(LogType.Normal, "frmAbout");
+
             this.InitializeComponent();
             this.Text = String.Format("About {0}", this.AssemblyTitle);
             this.labelProductName.Text = this.AssemblyProduct;
@@ -49,6 +49,8 @@ namespace DNiD2.intForms
         {
             get
             {
+                log.Log(LogType.Normal, "AssemblyTitle");
+
                 var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
                 if (attributes.Length > 0)
                 {
@@ -66,6 +68,8 @@ namespace DNiD2.intForms
         {
             get
             {
+                log.Log(LogType.Normal, "AssemblyVersion");
+
                 return Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
@@ -74,6 +78,8 @@ namespace DNiD2.intForms
         {
             get
             {
+                log.Log(LogType.Normal, "AssemblyDescription");
+
                 var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
                 if (attributes.Length == 0)
                 {
@@ -87,6 +93,8 @@ namespace DNiD2.intForms
         {
             get
             {
+                log.Log(LogType.Normal, "AssemblyProduct");
+
                 var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
                 if (attributes.Length == 0)
                 {
@@ -100,6 +108,8 @@ namespace DNiD2.intForms
         {
             get
             {
+                log.Log(LogType.Normal, "AssemblyCopyright");
+
                 var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
                 if (attributes.Length == 0)
                 {
@@ -113,6 +123,8 @@ namespace DNiD2.intForms
         {
             get
             {
+                log.Log(LogType.Normal, "AssemblyCompany");
+
                 var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
                 if (attributes.Length == 0)
                 {
@@ -125,7 +137,8 @@ namespace DNiD2.intForms
 
         private void frmAbout_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[frmAbout_Load]");
+            //Debug.WriteLine("[frmAbout_Load]");
+            log.Log(LogType.Normal, "frmAbout_Load");
         }
     }
 }

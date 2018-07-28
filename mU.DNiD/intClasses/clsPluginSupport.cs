@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,10 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
@@ -43,6 +40,8 @@ namespace DNiD2.intClasses
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         internal static extern bool IsWindow(HandleRef hWnd);
 
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.clsPluginSupport");
+
         /// <summary>
         /// The complete plugins list that is present...
         /// </summary>
@@ -55,6 +54,7 @@ namespace DNiD2.intClasses
         /// </summary>
         public static void InitPlugins()
         {
+            log.Log(LogType.Normal, "InitPlugins");
             var a = Directory.GetFiles(Path.GetDirectoryName(Application.ExecutablePath) + "\\plugins\\");
             foreach(var b in a)
             {
@@ -73,6 +73,7 @@ namespace DNiD2.intClasses
         /// <param name="myWindowControl">Handle of DNiD's main-window...</param>
         public static void doPluginJob(string dllName, string szFileName, Control myWindowControl)
         {
+            log.Log(LogType.Normal, "doPluginJob");
             try
             {
                 var hWnd = GetSafeHandle(myWindowControl);
@@ -81,6 +82,7 @@ namespace DNiD2.intClasses
             }
             catch (Exception ex)
             {
+                log.Log(ex, "Unforseen exception occured!");
                 using (var frm = new intForms.frmError("[doPluginJob]" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
                 {
                     frm.ShowDialog();
@@ -90,6 +92,8 @@ namespace DNiD2.intClasses
         #region Private Methods:
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
+            log.Log(LogType.Normal, "GetSafeHandle");
+
             var intPtr = IntPtr.Zero;
             var control = window as Control;
             if (control != null)
@@ -106,6 +110,7 @@ namespace DNiD2.intClasses
         }
         private static void AddPlugin(string DllName, string From)
         {
+            log.Log(LogType.Normal, "AddPlugin");
             if (!plugins.ContainsKey(DllName))
             {
                 plugins.Add(DllName, From);
@@ -113,6 +118,7 @@ namespace DNiD2.intClasses
         }
         private static string LoadDllInfo(string pluginDll)
         {
+            log.Log(LogType.Normal, "LoadDllInfo");
             try
             {
                 var a = clsNativeDllLoader.load_function<clsNativeDllLoader.LoadDll>("LoadDll", pluginDll);
@@ -121,6 +127,7 @@ namespace DNiD2.intClasses
             }
             catch (Exception ex)
             {
+                log.Log(ex, "Unforseen exception occured!");
                 using (var frm = new intForms.frmError("[LoadDllInfo]" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine + "InternalHelpLink: " + ex.HelpLink))
                 {
                     frm.ShowDialog();

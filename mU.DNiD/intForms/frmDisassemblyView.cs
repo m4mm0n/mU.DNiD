@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
@@ -33,16 +34,20 @@ namespace DNiD2.intForms
 
     public partial class frmDisassemblyView : ReaperTheme.ReaperForm
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmDisassemblyView");
 
+        private bool Is64;
         private uint addr = 0;
         private byte[] bitsRead;
         private BackgroundWorker bw = new BackgroundWorker();
         private frmProgress fProg;
 
-        public frmDisassemblyView(uint addressToDisassemble, byte[] bytesToRead)
+        public frmDisassemblyView(uint addressToDisassemble, byte[] bytesToRead, bool is64 = false)
         {
-            Debug.WriteLine("[frmDisassemblyView]");
+            //Debug.WriteLine("[frmDisassemblyView]");
+            log.Log(LogType.Normal, "frmDisassemblyView");
 
+            this.Is64 = is64;
             this.addr = addressToDisassemble;
             this.bitsRead = bytesToRead;
 
@@ -57,25 +62,31 @@ namespace DNiD2.intForms
 
         private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Debug.WriteLine("[Bw_ProgressChanged]");
+            //Debug.WriteLine("[Bw_ProgressChanged]");
+            log.Log(LogType.Normal, "Bw_ProgressChanged");
             this.fProg.SetCurrentProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Debug.WriteLine("[Bw_RunWorkerCompleted]");
+            //Debug.WriteLine("[Bw_RunWorkerCompleted]");
+            log.Log(LogType.Normal, "Bw_RunWorkerCompleted");
             this.fProg.Close();
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            Debug.WriteLine("[Bw_DoWork]");
-            this.DisassembleTarget(this.bitsRead, ArchitectureMode.x86_32);
+            //Debug.WriteLine("[Bw_DoWork]");
+            log.Log(LogType.Normal, "Bw_DoWork");
+            this.DisassembleTarget(this.bitsRead, Is64 ? ArchitectureMode.x86_64 : ArchitectureMode.x86_32);
         }
+
+        private object lockThread = new object();
 
         private void DisassembleTarget(byte[] fileBytes, ArchitectureMode mode)
         {
-            Debug.WriteLine("[DisassembleTarget]");
+            //Debug.WriteLine("[DisassembleTarget]");
+            log.Log(LogType.Normal, "DisassembleTarget");
             // Create the disassembler
             using (var disasm = new Disassembler(fileBytes, 1024, mode, this.addr, true, Vendor.Any))
             {
@@ -86,16 +97,20 @@ namespace DNiD2.intForms
                 // Disassemble each instruction and output to console
                 foreach (var insn in dis)
                 {
-                    this.WriteDis(insn.Offset.ToString("X8"), toHex(insn.Bytes), insn.ToString(), insn);
-                    this.bw.ReportProgress(o, "Added: " + insn.ToString());
-                    o++;
+                    lock (lockThread)
+                    {
+                        this.WriteDis(Is64 ? insn.Offset.ToString("X16") : insn.Offset.ToString("X8"), toHex(insn.Bytes), insn.ToString(), insn);
+                        this.bw.ReportProgress(o, "Added: " + insn.ToString());
+                        o++;
+                    }
                 }
             }
         }
 
         private ArchitectureMode GetArchitecture(PEImage a)
         {
-            Debug.WriteLine("[GetArchitecture]");
+            //Debug.WriteLine("[GetArchitecture]");
+            log.Log(LogType.Normal, "GetArchitecture");
             switch (a.ImageNTHeaders.FileHeader.Machine)
             {
                 case Machine.I386:
@@ -109,7 +124,8 @@ namespace DNiD2.intForms
 
         private void FrmDisassemblyView_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[FrmDisassemblyView_Load]");
+            //Debug.WriteLine("[FrmDisassemblyView_Load]");
+            log.Log(LogType.Normal, "FrmDisassemblyView_Load");
             this.fProg = new frmProgress("Loading DisassemblyView...");
             //fProg.MaxProgress(1024);
             this.bw.RunWorkerAsync();
@@ -119,7 +135,8 @@ namespace DNiD2.intForms
         private delegate void RefreshListViewDelegate();
         private void RefreshListView()
         {
-            Debug.WriteLine("[RefreshListView]");
+            //Debug.WriteLine("[RefreshListView]");
+            log.Log(LogType.Normal, "RefreshListView");
             if (this.InvokeRequired)
                 this.Invoke(new RefreshListViewDelegate(this.RefreshListView));
             else this.listView1.Refresh();
@@ -127,7 +144,8 @@ namespace DNiD2.intForms
 
         private static string toHex(byte[] bits)
         {
-            Debug.WriteLine("[toHex]");
+            //Debug.WriteLine("[toHex]");
+            log.Log(LogType.Normal, "toHex");
             var toRet = "";
             foreach (byte bit in bits)
             {
@@ -138,7 +156,8 @@ namespace DNiD2.intForms
 
         private void WriteDis(string addr, string bytes1, string instruction, Instruction branchType)
         {
-            Debug.WriteLine("[WriteDis]");
+            //Debug.WriteLine("[WriteDis]");
+            log.Log(LogType.Normal, "WriteDis");
             var item = new ListViewItem(addr);
             item.SubItems.Add(bytes1);
 
@@ -181,53 +200,12 @@ namespace DNiD2.intForms
 
             this.AddItemToList(item);
         }
-        //private void WriteDis(string addr, string bytes1, string instruction, BeaConstants.BranchType branchType)
-        //{
-        //    var item = new ListViewItem(addr);
-        //    item.SubItems.Add(bytes1);
 
-        //    switch (branchType)
-        //    {
-        //        case BeaConstants.BranchType.CallType:
-        //            item.SubItems.Add(instruction, Color.Blue, Color.LightBlue, this.Font);
-        //            break;
-        //        case BeaConstants.BranchType.JA:
-        //        case BeaConstants.BranchType.JB:
-        //        case BeaConstants.BranchType.JC:
-        //        case BeaConstants.BranchType.JE:
-        //        case BeaConstants.BranchType.JECXZ:
-        //        case BeaConstants.BranchType.JG:
-        //        case BeaConstants.BranchType.JL:
-        //        case BeaConstants.BranchType.JmpType:
-        //        case BeaConstants.BranchType.JNA:
-        //        case BeaConstants.BranchType.JNB:
-        //        case BeaConstants.BranchType.JNC:
-        //        case BeaConstants.BranchType.JNE:
-        //        case BeaConstants.BranchType.JNG:
-        //        case BeaConstants.BranchType.JNL:
-        //        case BeaConstants.BranchType.JNO:
-        //        case BeaConstants.BranchType.JNP:
-        //        case BeaConstants.BranchType.JNS:
-        //        case BeaConstants.BranchType.JO:
-        //        case BeaConstants.BranchType.JP:
-        //        case BeaConstants.BranchType.JS:
-        //            item.SubItems.Add(instruction, Color.Red, Color.Yellow, this.Font);
-        //            break;
-        //        case BeaConstants.BranchType.RetType:
-        //            item.SubItems.Add(instruction, Color.Red, Color.LightBlue, this.Font);
-        //            break;
-        //        default:
-        //            item.SubItems.Add(instruction, Color.Black, Color.White, this.Font);
-        //            break;
-        //    }
-        //    item.UseItemStyleForSubItems = false;
-
-        //    AddItemToList(item);
-        //}
         private delegate void AddItemToListDelegate(ListViewItem a);
         private void AddItemToList(ListViewItem myItem)
         {
-            Debug.WriteLine("[AddItemToList]");
+            //Debug.WriteLine("[AddItemToList]");
+            log.Log(LogType.Normal, "AddItemToList");
             if (this.InvokeRequired)
                 this.Invoke(new AddItemToListDelegate(this.AddItemToList), new object[] { myItem });
             else this.listView1.Items.Add(myItem);
@@ -240,27 +218,31 @@ namespace DNiD2.intForms
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton1_Click]");
+            //Debug.WriteLine("[reaperButton1_Click]");
+            log.Log(LogType.Normal, "reaperButton1_Click");
             this.Close();
         }
 
         private void copyAddressToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[copyAddressToolStripMenuItem_Click]");
+            //Debug.WriteLine("[copyAddressToolStripMenuItem_Click]");
+            log.Log(LogType.Normal, "copyAddressToolStripMenuItem_Click");
             Clipboard.Clear();
             Clipboard.SetText(this.listView1.SelectedItems[0].SubItems[0].Text);
         }
 
         private void copyBytesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[copyBytesToolStripMenuItem_Click]");
+            //Debug.WriteLine("[copyBytesToolStripMenuItem_Click]");
+            log.Log(LogType.Normal, "copyBytesToolStripMenuItem_Click");
             Clipboard.Clear();
             Clipboard.SetText(this.listView1.SelectedItems[0].SubItems[1].Text);
         }
 
         private void copyDisassemblyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[copyDisassemblyToolStripMenuItem_Click]");
+            //Debug.WriteLine("[copyDisassemblyToolStripMenuItem_Click]");
+            log.Log(LogType.Normal, "copyDisassemblyToolStripMenuItem_Click");
             Clipboard.Clear();
             Clipboard.SetText(this.listView1.SelectedItems[0].SubItems[2].Text);
         }

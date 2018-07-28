@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,42 +17,40 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
-    using System.Diagnostics;
-
     public partial class frmError : ReaperTheme.ReaperForm
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmError");
+
         public frmError(string error)
         {
-            Debug.WriteLine("[frmError]");
+            //Debug.WriteLine("[frmError]");
+            log.Log(LogType.Normal, "frmError");
             this.InitializeComponent();
             this.reaperTextbox1.Text = error;
         }
 
         private void frmError_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[frmError_Load]");
+            //Debug.WriteLine("[frmError_Load]");
+            log.Log(LogType.Normal, "frmError_Load");
         }
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton1_Click]");
+            //Debug.WriteLine("[reaperButton1_Click]");
+            log.Log(LogType.Normal, "reaperButton1_Click");
             this.Close();
         }
 
         private void reaperButton2_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton2_Click]");
+            //Debug.WriteLine("[reaperButton2_Click]");
+            log.Log(LogType.Normal, "reaperButton2_Click");
             Clipboard.Clear();
             Clipboard.SetText(this.reaperTextbox1.Text);
         }

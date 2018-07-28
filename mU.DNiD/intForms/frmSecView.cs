@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,14 +17,10 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using dnlib.PE;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
@@ -35,9 +31,16 @@ namespace DNiD2.intForms
     public partial class frmSecView : Form
     {
         private string myPeFileName;
+        private bool is64;
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmSecView");
         public frmSecView(dnlib.PE.PEImage myPe, string peFileName)
         {
-            Debug.WriteLine("[frmSecView]");
+            //Debug.WriteLine("[frmSecView]");
+            log.Log(LogType.Normal, "frmSecView");
+
+            this.is64 = myPe.ImageNTHeaders.FileHeader.Machine == Machine.AMD64 |
+                        myPe.ImageNTHeaders.FileHeader.Machine == Machine.IA64;
+
             this.InitializeComponent();
             this.myPeFileName = peFileName;
             foreach (var a in myPe.ImageSectionHeaders)
@@ -48,18 +51,21 @@ namespace DNiD2.intForms
 
         private void frmSecView_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[frmSecView_Load]");
+            //Debug.WriteLine("[frmSecView_Load]");
+            log.Log(LogType.Normal, "frmSecView_Load");
         }
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton1_Click]");
+            //Debug.WriteLine("[reaperButton1_Click]");
+            log.Log(LogType.Normal, "reaperButton1_Click");
             this.Close();
         }
 
         private void dissassembleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[dissassembleToolStripMenuItem_Click]");
+            //Debug.WriteLine("[dissassembleToolStripMenuItem_Click]");
+            log.Log(LogType.Normal, "dissassembleToolStripMenuItem_Click");
             if (this.reaperListView1.SelectedIndices[0] > -1)
             {
                 var fileBytes = File.ReadAllBytes(this.myPeFileName);
@@ -75,7 +81,8 @@ namespace DNiD2.intForms
 
         private void hexViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[hexViewToolStripMenuItem_Click]");
+            //Debug.WriteLine("[hexViewToolStripMenuItem_Click]");
+            log.Log(LogType.Normal, "hexViewToolStripMenuItem_Click");
             if (this.reaperListView1.SelectedIndices[0] > -1)
             {
                 var fileBytes = File.ReadAllBytes(this.myPeFileName);

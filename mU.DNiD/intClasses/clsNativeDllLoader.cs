@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,16 +17,14 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
     static class clsNativeDllLoader
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.clsNativeDllLoader");
+
         #region Native Calls
         [DllImport("kernel32.dll")]
         internal static extern IntPtr LoadLibrary(string dllname);
@@ -44,6 +42,8 @@ namespace DNiD2.intClasses
 
         public static T load_function<T>(string name, string m_dll) where T : class
         {
+            log.Log(LogType.Normal, "load_function");
+
             var address = GetProcAddress(LoadLibrary(m_dll), name);
             var fn_ptr = Marshal.GetDelegateForFunctionPointer((IntPtr)address, typeof(T));
             return fn_ptr as T;

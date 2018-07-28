@@ -26,12 +26,19 @@ PluginSupport: mammon (me)
 PatternSearch: mammon (me)
 
 TODO:
-+Add possibility of using different pattern-finder engines... (thx mr.eXodia for the idea)
++Add method for adding tool to context-menu internally...
 +++Got suggestions? Good, send them to me!+++
 
 
 
 VERSION
+
+[2018/07/28] - 2.0.7.0: (by mammon)
+=======================
++Added logging for tool...
++Added Thread-Locking whereever possible to prevent both memory-leaks,
+ and unforseen crashes...
+*Fixed issue with tool not reporting correct RVA when 64-bit...
 
 [2016/04/02] - 2.0.6.0: (by mammon)
 =======================

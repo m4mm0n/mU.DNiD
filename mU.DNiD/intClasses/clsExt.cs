@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,19 +17,16 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DNiD2.intClasses
 {
-    using System.Diagnostics;
     using System.Globalization;
 
     static class clsExt
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmAbout");
+
         /// <summary>
         /// Converts any string byte-array into a ASCII-string...
         /// </summary>
@@ -37,7 +34,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static string Bytes2String(this byte[] Bytes)
         {
-            Debug.WriteLine("[Bytes2String]");
+            //Debug.WriteLine("[Bytes2String]");
+            log.Log(LogType.Normal, "Bytes2String");
             var builder = new StringBuilder();
             foreach (var a in Bytes)
             {
@@ -52,7 +50,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static char Byte2Char(this byte Byte)
         {
-            Debug.WriteLine("[Byte2Char]");
+            //Debug.WriteLine("[Byte2Char]");
+            log.Log(LogType.Normal, "Byte2Char");
             return Byte >= 32 && Byte < 127 ? (char)Byte : '.';
         }
         /// <summary>
@@ -62,7 +61,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static string RemoveWhiteSpaces(this string From)
         {
-            Debug.WriteLine("[RemoveWhiteSpaces]");
+            //Debug.WriteLine("[RemoveWhiteSpaces]");
+            log.Log(LogType.Normal, "RemoveWhiteSpaces");
             return From.Replace(" ", "");
         }
         /// <summary>
@@ -72,7 +72,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static string GetKeyValue(this string From)
         {
-            Debug.WriteLine("[GetKeyValue]");
+            //Debug.WriteLine("[GetKeyValue]");
+            log.Log(LogType.Normal, "GetKeyValue");
             var a = From.Split(new char[] { '=' });
             return a[1].Trim();
         }
@@ -83,7 +84,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static bool isHexShortArray(this string toCheck)
         {
-            Debug.WriteLine("[isHexShortArray]");
+            //Debug.WriteLine("[isHexShortArray]");
+            log.Log(LogType.Normal, "isHexShortArray");
             try
             {
                 var a = HexToShortArray(toCheck);
@@ -101,7 +103,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static uint isUint(this string toCheck)
         {
-            Debug.WriteLine("[isUint]");
+            //Debug.WriteLine("[isUint]");
+            log.Log(LogType.Normal, "isUint");
             var a = (uint)0xFFFFFFFF;
             var b = uint.TryParse(toCheck, isHex(toCheck), CultureInfo.CurrentCulture, out a);
             return a;
@@ -113,8 +116,9 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static NumberStyles isHex(this string toCheck)
         {
-            Debug.WriteLine("[isHex]");
-            if(System.Text.RegularExpressions.Regex.IsMatch(toCheck, @"\A\b[0-9a-fA-F]+\b\Z"))
+            //Debug.WriteLine("[isHex]");
+            log.Log(LogType.Normal, "isHex");
+            if (System.Text.RegularExpressions.Regex.IsMatch(toCheck, @"\A\b[0-9a-fA-F]+\b\Z"))
                 return NumberStyles.HexNumber;
 
             return NumberStyles.Any;
@@ -126,7 +130,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static bool isBoolean(this string toCheck)
         {
-            Debug.WriteLine("[isBoolean]");
+            //Debug.WriteLine("[isBoolean]");
+            log.Log(LogType.Normal, "isBoolean");
             var a = false;
             var b = bool.TryParse(toCheck, out a);
             return a;
@@ -138,7 +143,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static bool StringToBoolean(this string toFetch)
         {
-            Debug.WriteLine("[StringToBoolean]");
+            //Debug.WriteLine("[StringToBoolean]");
+            log.Log(LogType.Normal, "StringToBoolean");
             return bool.Parse(toFetch);
         }
         /// <summary>
@@ -148,7 +154,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static short[] HexToShortArray(this string toFix)
         {
-            Debug.WriteLine("[HexToShortArray]");
+            //Debug.WriteLine("[HexToShortArray]");
+            log.Log(LogType.Normal, "HexToShortArray");
             if (toFix.Length % 2 != 0)
             {
                 throw new ArgumentException(String.Format(System.Globalization.CultureInfo.InvariantCulture, "The binary key cannot have an odd number of digits: {0}", toFix));
@@ -171,7 +178,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         public static string ShortToHex(this short[] myLst)
         {
-            Debug.WriteLine("[ShortToHex]");
+            //Debug.WriteLine("[ShortToHex]");
+            log.Log(LogType.Normal, "ShortToHex");
             var a = new StringBuilder();
             foreach (var b in myLst)
             {

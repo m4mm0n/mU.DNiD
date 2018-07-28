@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,39 +17,34 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
-    using System.Diagnostics;
-
     using dnlib.PE;
-
-    using DNiD2.intClasses;
 
     public partial class frmPEDetails : Form
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmPEDetails");
+
         private PEImage MyPEImage;
         private BackgroundWorker myBw = new BackgroundWorker();
         private delegate void MyDelegate(object a);
 
         public frmPEDetails(PEImage myPe)
         {
-            Debug.WriteLine("[frmPEDetails]");
+            //Debug.WriteLine("[frmPEDetails]");
+            log.Log(LogType.Normal, "frmPEDetails");
             MyPEImage = myPe;
             InitializeComponent();
         }
 
         private void frmPEDetails_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[frmPEDetails_Load]");
+            //Debug.WriteLine("[frmPEDetails_Load]");
+            log.Log(LogType.Normal, "frmPEDetails_Load");
             this.myBw.WorkerReportsProgress = true;
             this.myBw.DoWork += MyBwOnDoWork;
             this.myBw.RunWorkerCompleted += MyBwOnRunWorkerCompleted;
@@ -58,13 +53,14 @@ namespace DNiD2.intForms
 
         private void MyBwOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
-            Debug.WriteLine("[MyBwOnRunWorkerCompleted]");
-
+            //Debug.WriteLine("[MyBwOnRunWorkerCompleted]");
+            log.Log(LogType.Normal, "MyBwOnRunWorkerCompleted");
         }
 
         private void MyBwOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            Debug.WriteLine("[MyBwOnDoWork]");
+            //Debug.WriteLine("[MyBwOnDoWork]");
+            log.Log(LogType.Normal, "MyBwOnDoWork");
             foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(this.MyPEImage.ImageNTHeaders.OptionalHeader))
             {
                 this.AddDetail(descriptor.Name + ": " + this.GetObj(descriptor.GetValue(this.MyPEImage.ImageNTHeaders.OptionalHeader)));
@@ -73,7 +69,8 @@ namespace DNiD2.intForms
 
         private string GetObj(object a)
         {
-            Debug.WriteLine("[GetObj]");
+            //Debug.WriteLine("[GetObj]");
+            log.Log(LogType.Normal, "GetObj");
             var c = "";
             try
             {
@@ -88,14 +85,16 @@ namespace DNiD2.intForms
         }
         private void AddDetail(object a)
         {
-            Debug.WriteLine("[AddDetail]");
+            //Debug.WriteLine("[AddDetail]");
+            log.Log(LogType.Normal, "AddDetail");
             if (this.InvokeRequired) this.Invoke(new MyDelegate(this.AddDetail), new object[] { a });
             else this.biList.Items.Add(a.ToString());
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button1_Click]");
+            //Debug.WriteLine("[button1_Click]");
+            log.Log(LogType.Normal, "button1_Click");
             this.Close();
         }
     }

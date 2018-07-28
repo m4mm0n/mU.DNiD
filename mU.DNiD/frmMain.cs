@@ -39,21 +39,26 @@ namespace DNiDGUI
         private readonly BackgroundWorker bw;
         private readonly string fileToScan;
 
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmMain");
+
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Debug.WriteLine("[Bw_RunWorkerCompleted]");
+            //Debug.WriteLine("[Bw_RunWorkerCompleted]");
+            log.Log(LogType.Normal, "Bw_RunWorkerCompleted");
             this.reaperButton7.Enabled = true;
         }
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            Debug.WriteLine("[Bw_DoWork]");
+            //Debug.WriteLine("[Bw_DoWork]");
+            log.Log(LogType.Normal, "Bw_DoWork");
             this.ScanFile();
         }
 
         private static string GetFilename(DragEventArgs e)
         {
-            Debug.WriteLine("[GetFilename]");
+            //Debug.WriteLine("[GetFilename]");
+            log.Log(LogType.Normal, "GetFilename");
             if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
             {
                 var data = e.Data.GetData("FileNameW") as Array;
@@ -69,7 +74,8 @@ namespace DNiDGUI
 
         private static string GetSectionHeaderName(uint rva, PEImage myPe)
         {
-            Debug.WriteLine("[GetSectionHeaderName]");
+            //Debug.WriteLine("[GetSectionHeaderName]");
+            log.Log(LogType.Normal, "GetSectionHeaderName");
             var myRet = "";
             Parallel.ForEach(myPe.ImageSectionHeaders, section =>
             {
@@ -88,7 +94,8 @@ namespace DNiDGUI
 
         private void ScanFile()
         {
-            Debug.WriteLine("[ScanFile]");
+            //Debug.WriteLine("[ScanFile]");
+            log.Log(LogType.Normal, "ScanFile");
             if (this.InvokeRequired) this.Invoke(new ScanFileDelegate(this.ScanFile));
             else
             {
@@ -96,6 +103,9 @@ namespace DNiDGUI
                 {
                     using (var a = new PEImage(File.ReadAllBytes(this.txtFilePath.Text)))
                     {
+                        var is64 = a.ImageNTHeaders.FileHeader.Machine == Machine.AMD64 |
+                                   a.ImageNTHeaders.FileHeader.Machine == Machine.IA64;
+
                         if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\external_sigs.txt"))
                         {
                             clsScanner.SetSignatureDB(false, false, true,
@@ -107,13 +117,20 @@ namespace DNiDGUI
                             clsScanner.SetSignatureDB(true, false, false);
                             this.reaperTextbox8.Text = clsScanner.Scan(this.txtFilePath.Text).Trim();
                         }
-                        this.txtEntrypoint.Text = ((uint) a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint).ToString("X8");
+
+                        this.txtEntrypoint.Text =
+                            is64
+                                ? ((ulong) a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint).ToString("X16")
+                                : ((uint) a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint).ToString("X8");
 
                         this.txtSubSystem.Text = a.ImageNTHeaders.OptionalHeader.Subsystem.ToString();
                         this.txtEPSection.Text =
                             GetSectionHeaderName((uint) a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint, a);
-                        this.txtFileOffset.Text =
-                            ((uint) a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint)).ToString("X8");
+                        this.txtFileOffset.Text = is64
+                            ? ((ulong) a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint)).ToString(
+                                "X16")
+                            : ((uint) a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint))
+                            .ToString("X8");
                         var b = File.ReadAllBytes(this.txtFilePath.Text);
                         var c = (int) a.ToFileOffset(a.ImageNTHeaders.OptionalHeader.AddressOfEntryPoint);
                         this.txtFirstBytes.Text = b[c].ToString("X2") + "," + b[c + 1].ToString("X2") + "," +
@@ -124,7 +141,8 @@ namespace DNiDGUI
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("[ScanFile] Exception: " + ex.Message);
+                    //Debug.WriteLine("[ScanFile] Exception: " + ex.Message);
+                    log.Log(ex, "File not supported exception!");
                     this.reaperTextbox8.Text = "File not supported!";
                 }
             }
@@ -140,7 +158,8 @@ namespace DNiDGUI
 
         public frmMain([Optional] string File2Scan)
         {
-            Debug.WriteLine("[frmMain]");
+            //Debug.WriteLine("[frmMain]");
+            log.Log(LogType.Normal, "frmMain");
             this.bw = new BackgroundWorker();
             this.bw.DoWork += this.Bw_DoWork;
             this.bw.RunWorkerCompleted += this.Bw_RunWorkerCompleted;
@@ -161,7 +180,8 @@ namespace DNiDGUI
 
         private void FrmMain_DragEnter(object sender, DragEventArgs e)
         {
-            Debug.WriteLine("[FrmMain_DragEnter]");
+            //Debug.WriteLine("[FrmMain_DragEnter]");
+            log.Log(LogType.Normal, "FrmMain_DragEnter");
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.Copy; // Okay
             else
@@ -170,7 +190,8 @@ namespace DNiDGUI
 
         private void FrmMain_DragDrop(object sender, DragEventArgs e)
         {
-            Debug.WriteLine("[FrmMain_DragDrop]");
+            //Debug.WriteLine("[FrmMain_DragDrop]");
+            log.Log(LogType.Normal, "FrmMain_DragDrop");
             if (!this.bw.IsBusy)
             {
                 this.txtEntrypoint.Text = "";
@@ -190,7 +211,8 @@ namespace DNiDGUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[Form1_Load]");
+            //Debug.WriteLine("[Form1_Load]");
+            log.Log(LogType.Normal, "Form1_Load");
             clsPluginSupport.InitPlugins();
             if (clsPluginSupport.plugins.Count > 0) this.AddNativePlugins(clsPluginSupport.plugins);
         }
@@ -201,20 +223,23 @@ namespace DNiDGUI
 
         private void reaperButton7_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton7_Click]");
+            //Debug.WriteLine("[reaperButton7_Click]");
+            log.Log(LogType.Normal, "reaperButton7_Click");
             this.reaperButton7.Enabled = false;
             this.bw.RunWorkerAsync();
         }
 
         private void reaperButton5_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton5_Click]");
+            //Debug.WriteLine("[reaperButton5_Click]");
+            log.Log(LogType.Normal, "reaperButton5_Click");
             Application.Exit();
         }
 
         private void reaperButton6_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton6_Click]");
+            //Debug.WriteLine("[reaperButton6_Click]");
+            log.Log(LogType.Normal, "reaperButton6_Click");
             using (var frm = new frmAbout())
             {
                 frm.ShowDialog();
@@ -223,7 +248,8 @@ namespace DNiDGUI
 
         private void reaperButton1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[reaperButton1_Click]");
+            //Debug.WriteLine("[reaperButton1_Click]");
+            log.Log(LogType.Normal, "reaperButton1_Click");
             using (var a = new OpenFileDialog())
             {
                 if (this.txtFilePath.Text.Length > 0)
@@ -239,13 +265,15 @@ namespace DNiDGUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button1_Click]");
+            //Debug.WriteLine("[button1_Click]");
+            log.Log(LogType.Normal, "button1_Click");
             if (this.mnuPlugins.Items.Count > 0) this.mnuPlugins.Show(this.button1, this.button1.PointToClient(Cursor.Position));
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button2_Click]");
+            //Debug.WriteLine("[button2_Click]");
+            log.Log(LogType.Normal, "button2_Click");
             if (this.txtFilePath.Text.Length > 0)
             {
                 using (var a = new PEImage(File.ReadAllBytes(this.txtFilePath.Text)))
@@ -260,7 +288,8 @@ namespace DNiDGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button3_Click]");
+            //Debug.WriteLine("[button3_Click]");
+            log.Log(LogType.Normal, "button3_Click");
             var a = File.ReadAllBytes(this.txtFilePath.Text);
             var b = new byte[1024];
             Array.Copy(a, uint.Parse(this.txtFileOffset.Text, NumberStyles.HexNumber), b, 0, 1024);
@@ -272,7 +301,8 @@ namespace DNiDGUI
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button4_Click]");
+            //Debug.WriteLine("[button4_Click]");
+            log.Log(LogType.Normal, "button4_Click");
             using (var frm = new frmPEDetails(new PEImage(File.ReadAllBytes(this.txtFilePath.Text))))
             {
                 frm.ShowDialog();
@@ -281,7 +311,8 @@ namespace DNiDGUI
 
         private void mnuPlugins_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            Debug.WriteLine("[mnuPlugins_ItemClicked]");
+            //Debug.WriteLine("[mnuPlugins_ItemClicked]");
+            log.Log(LogType.Normal, "mnuPlugins_ItemClicked");
             this.mnuPlugins.Close();
             this.GetNativeFunction(e.ClickedItem.Text);
         }
@@ -292,7 +323,8 @@ namespace DNiDGUI
 
         private void AddNativePlugins(Dictionary<string, string> myPlugins)
         {
-            Debug.WriteLine("[AddNativePlugins]");
+            //Debug.WriteLine("[AddNativePlugins]");
+            log.Log(LogType.Normal, "AddNativePlugins");
             foreach (var a in myPlugins)
             {
                 this.mnuPlugins.Items.Add(a.Key);
@@ -301,7 +333,8 @@ namespace DNiDGUI
 
         private void GetNativeFunction(string plugName)
         {
-            Debug.WriteLine("[GetNativeFunction]");
+            //Debug.WriteLine("[GetNativeFunction]");
+            log.Log(LogType.Normal, "GetNativeFunction");
             var b = this.txtFilePath.Text;
             foreach (var a in clsPluginSupport.plugins)
             {

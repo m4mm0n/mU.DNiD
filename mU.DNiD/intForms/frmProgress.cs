@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,14 +17,8 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
@@ -32,10 +26,13 @@ namespace DNiD2.intForms
 
     public partial class frmProgress : Form
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmProgress");
+
         private delegate void MaxProgressDelegate(int a);
         public void MaxProgress(int a)
         {
-            Debug.WriteLine("[MaxProgress]");
+            //Debug.WriteLine("[MaxProgress]");
+            log.Log(LogType.Normal, "MaxProgress");
             if (this.InvokeRequired) this.Invoke(new MaxProgressDelegate(this.MaxProgress), new object[] { a });
             else
                 this.pBar1.Maximum = a;
@@ -43,13 +40,15 @@ namespace DNiD2.intForms
         }
         public void SetCurrentProgress(int Percent, string Operation)
         {
-            Debug.WriteLine("[SetCurrentProgress]");
+            //Debug.WriteLine("[SetCurrentProgress]");
+            log.Log(LogType.Normal, "SetCurrentProgress");
             this.pBar1.Value = Percent;
             this.szProgress.Text = Operation;
         }
         public frmProgress(string OperationText)
         {
-            Debug.WriteLine("[frmProgress]");
+            //Debug.WriteLine("[frmProgress]");
+            log.Log(LogType.Normal, "frmProgress");
             this.InitializeComponent();
 
             this.Text = OperationText;
@@ -57,7 +56,8 @@ namespace DNiD2.intForms
 
         private void frmProgress_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[frmProgress_Load]");
+            //Debug.WriteLine("[frmProgress_Load]");
+            log.Log(LogType.Normal, "frmProgress_Load");
         }
     }
 }

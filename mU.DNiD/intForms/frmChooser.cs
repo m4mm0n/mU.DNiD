@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,14 +17,8 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DNiD2.intClasses;
 
 namespace DNiD2.intForms
 {
@@ -34,10 +28,14 @@ namespace DNiD2.intForms
     {
         private uint addr = 0;
         private byte[] bitsRead;
+        private bool Is64;
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmChooser");
 
-        public frmChooser(uint addressToDisassemble, byte[] bytesToRead)
+        public frmChooser(uint addressToDisassemble, byte[] bytesToRead, bool is64 = false)
         {
-            Debug.WriteLine("[frmChooser]");
+            //Debug.WriteLine("[frmChooser]");
+            log.Log(LogType.Normal, "frmChooser");
+            this.Is64 = is64;
             this.addr = addressToDisassemble;
             this.bitsRead = bytesToRead;
 
@@ -57,10 +55,11 @@ namespace DNiD2.intForms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button1_Click]");
+            //Debug.WriteLine("[button1_Click]");
+            log.Log(LogType.Normal, "button1_Click");
             if (this.radioButton1.Checked)
             {
-                using (var frm = new frmDisassemblyView(this.addr, this.bitsRead))
+                using (var frm = new frmDisassemblyView(this.addr, this.bitsRead, this.Is64))
                 {
                     this.Hide();
                     frm.ShowDialog();

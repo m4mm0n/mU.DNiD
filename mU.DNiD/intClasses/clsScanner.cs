@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ namespace DNiD2.intClasses
     internal static class clsScanner
     {
         internal static Dictionary<string, Tuple<short[], bool>> mySigs;
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.clsScanner");
 
         /// <summary>
         ///     Sets the signature DataBase to read the signatures from...
@@ -42,7 +43,8 @@ namespace DNiD2.intClasses
         public static void SetSignatureDB(bool useInternalOnly, bool useExternalOnly, bool useBothIntExt,
             [Optional] string externalDB)
         {
-            Debug.WriteLine("[SetSignatureDB]");
+            //Debug.WriteLine("[SetSignatureDB]");
+            log.Log(LogType.Normal, "SetSignatureDB");
             Signatures.Initialize();
 
             if (useInternalOnly)
@@ -59,7 +61,8 @@ namespace DNiD2.intClasses
         /// <returns>Protector detected</returns>
         public static string Scan(byte[] lpBuffer)
         {
-            Debug.WriteLine("[Scan]");
+            //Debug.WriteLine("[Scan]");
+            log.Log(LogType.Normal, "Scan [byte-array]");
             var toReturn = "Unknown or no protection!";
             Parallel.ForEach(mySigs, pair =>
             {
@@ -91,7 +94,8 @@ namespace DNiD2.intClasses
         /// <returns>Protector detected</returns>
         public static string Scan(string filePath)
         {
-            Debug.WriteLine("[Scan]");
+            //Debug.WriteLine("[Scan]");
+            log.Log(LogType.Normal, "Scan [filename]");
             return Scan(File.ReadAllBytes(filePath));
         }
 
@@ -103,7 +107,8 @@ namespace DNiD2.intClasses
         /// <returns></returns>
         internal static Dictionary<string, Tuple<short[], bool>> CreateExt(bool useIntToo, string[] sigListX)
         {
-            Debug.WriteLine("[CreateExt]");
+            //Debug.WriteLine("[CreateExt]");
+            log.Log(LogType.Normal, "CreateExt");
             var sigList = new Dictionary<string, Tuple<short[], bool>>();
 
             var i = 0;
@@ -143,7 +148,8 @@ namespace DNiD2.intClasses
         }
         internal static bool SearchBytes(byte[] file, short[] signature, long startOffset)
         {
-            Debug.WriteLine("[SearchBytes]");
+            //Debug.WriteLine("[SearchBytes]");
+            log.Log(LogType.Normal, "SearchBytes");
             var wildCards = new bool[signature.Length];
             for (var i = 0; i < signature.Length; i++)
             {
@@ -160,7 +166,8 @@ namespace DNiD2.intClasses
         }
         internal static bool FindPattern(byte[] Body, short[] Pattern, bool[] Wild, int start = 0)
         {
-            Debug.WriteLine("[FindPattern]");
+            //Debug.WriteLine("[FindPattern]");
+            log.Log(LogType.Normal, "FindPattern");
             var foundIndex = -1;
 
             if (Body.Length > 0

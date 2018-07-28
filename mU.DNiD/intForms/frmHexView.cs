@@ -1,6 +1,6 @@
 ﻿/*
     DNiD 2 - PE Identifier.
-    Copyright (C) 2016  mammon
+    Copyright (C) 2018  mammon
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,21 +18,15 @@
 
 using DNiD2.intClasses;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DNiD2.intForms
 {
-    using System.Diagnostics;
-
     public partial class frmHexView : Form
     {
+        static Logger log = new Logger(LoggerType.Console_File, "DNiD2.frmHexView");
+
         private uint addr = 0;
         private byte[] bitsRead;
 
@@ -41,7 +35,8 @@ namespace DNiD2.intForms
 
         public frmHexView(uint addressToDisassemble, byte[] bytesToRead)
         {
-            Debug.WriteLine("[frmHexView]");
+            //Debug.WriteLine("[frmHexView]");
+            log.Log(LogType.Normal, "frmHexView");
             this.addr = addressToDisassemble;
             this.bitsRead = bytesToRead;
 
@@ -55,25 +50,29 @@ namespace DNiD2.intForms
 
         private void Bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            Debug.WriteLine("[Bw_DoWork]");
+            //Debug.WriteLine("[Bw_DoWork]");
+            log.Log(LogType.Normal, "Bw_DoWork");
             this.hexBox1.ByteProvider = new Be.Windows.Forms.DynamicByteProvider(this.bitsRead);
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Debug.WriteLine("[Bw_RunWorkerCompleted]");
+            //Debug.WriteLine("[Bw_RunWorkerCompleted]");
+            log.Log(LogType.Normal, "Bw_RunWorkerCompleted");
             this.fProg.Close();
         }
 
         private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            Debug.WriteLine("[Bw_ProgressChanged]");
+            //Debug.WriteLine("[Bw_ProgressChanged]");
+            log.Log(LogType.Normal, "Bw_ProgressChanged");
             this.fProg.SetCurrentProgress(e.ProgressPercentage, (string)e.UserState);
         }
 
         private void frmHexView_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine("[frmHexView_Load]");
+            //Debug.WriteLine("[frmHexView_Load]");
+            log.Log(LogType.Normal, "frmHexView_Load");
             this.fProg = new frmProgress("Loading HewView...");
             this.fProg.MaxProgress(64);
             this.bw.RunWorkerAsync();
@@ -82,7 +81,8 @@ namespace DNiD2.intForms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("[button1_Click]");
+            //Debug.WriteLine("[button1_Click]");
+            log.Log(LogType.Normal, "button1_Click");
             this.Close();
         }
     }
